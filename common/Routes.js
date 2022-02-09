@@ -84,4 +84,5 @@ export default {
   eventAttendeesDelete: apiUrl + 'event_attendees/delete',
   sharePostCreate: apiUrl + 'share_posts/create',
   confirmPaymentIntent: apiUrl + 'stripe_webhooks/confirm_payment',
+  fileUpload: apiUrl + 'files/upload_file'
 };
