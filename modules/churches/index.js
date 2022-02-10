@@ -6,6 +6,7 @@ import Api from 'services/api/index.js';
 import { connect } from 'react-redux';
 import { Spinner } from 'components';
 import EmptyMessage from 'modules/generic/Empty.js'
+import Geolocation from '@react-native-community/geolocation';
 
 class Churches extends Component {
   constructor(props) {
@@ -18,28 +19,48 @@ class Churches extends Component {
       limit: 5,
       offset: 0,
       searchLimit: 5,
-      searchOffset: 0
+      searchOffset: 0,
+      region: {
+        latitude: 0,
+        longitude: 0,
+        latitudeDelta: 0.12,
+        longitudeDelta: 0.12,
+        formatted_address: null,
+      }
     }
   }
 
   componentDidMount() {
     this.props.setSearchChurch(null)
-    this.retrieve(false)
+    const config = {
+      enableHighAccuracy: false
+    };
+    Geolocation.getCurrentPosition(
+      info => {
+        this.setState({
+          region: {
+            ...this.state.region,
+            latitude: info.coords.latitude,
+            longitude: info.coords.longitude
+          }
+        }, () => {
+          this.retrieve(false)
+        })
+      },
+      error => console.log("ERROR", error),
+      config,
+    );
   }
 
   retrieve = (flag) => {
     const { user } = this.props.state;
+    const { region } = this.state;
     let parameter = {
-      condition: [
-        {
-          value: user.id,
-          column: 'account_id',
-          clause: '!='
-        }
-      ],
       sort: { created_at: 'asc' },
-      limit: this.state.limit,
-      offset: flag == true && this.state.offset > 0 ? (this.state.offset * this.state.limit) : this.state.offset
+      masses: {
+        latitude: region.latitude,
+        longitude: region.longitude
+      }
     }
     console.log(parameter, Routes.merchantsRetrieve);
     this.setState({ isLoading: true })

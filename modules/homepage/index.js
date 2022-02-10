@@ -54,8 +54,9 @@ class HomePage extends Component {
               latitude: info.coords.latitude,
               longitude: info.coords.longitude
             }
+          }, () => {
+            this.retrieveChurches()
           })
-          this.retrieveChurches()
         },
         error => console.log("ERROR", error),
         config,
@@ -160,14 +161,13 @@ class HomePage extends Component {
     const { days, region } = this.state;
     let parameter = {
       sort: { created_at: 'asc' },
-      limit: 6,
-      offset: 0,
       masses: {
         latitude: region.latitude,
         longitude: region.longitude
       }
     }
     this.setState({ isLoading1: true })
+    console.log(Routes.merchantsRetrieve, parameter)
     Api.request(Routes.merchantsRetrieve, parameter, response => {
       this.setState({ isLoading1: false })
       console.log('[RESPONSE]', response)
