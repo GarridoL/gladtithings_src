@@ -5,6 +5,7 @@ import CardsWithImages from '../generic/CardsWithImages';
 import Api from 'services/api/index.js';
 import { connect } from 'react-redux';
 import { Spinner } from 'components';
+import EmptyMessage from 'modules/generic/Empty.js'
 
 class Churches extends Component {
   constructor(props) {
@@ -143,6 +144,10 @@ class Churches extends Component {
             }
           }}
         >
+          {data.length === 0 && !isLoading && <View style={{
+            padding: 20
+          }}>
+            <EmptyMessage message={language.churches.empty} /></View>}
           {this.state.isLoading ? <Spinner mode="overlay" /> : null}
           <CardsWithImages
             photos={true}

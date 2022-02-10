@@ -363,7 +363,7 @@ class Community extends Component {
             <View style={{
               marginBottom: height / 2
             }}>
-              <Comments withImages={true} shouldRetrieve={shouldRetrieve} />
+              <Comments withImages={true} shouldRetrieve={shouldRetrieve} navigation={this.props.navigation}/>
             </View>
           }
           {

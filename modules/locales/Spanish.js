@@ -286,5 +286,8 @@ export default {
   },
   events: {
     attend: 'Atender'
+  },
+  churches: {
+    empty: 'No se encontró ninguna iglesia para este filtro.'
   }
 }

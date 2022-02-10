@@ -286,5 +286,8 @@ export default {
   },
   events: {
     attend: 'Attend'
+  },
+  churches: {
+    empty: 'No church found for this filter.'
   }
 }
