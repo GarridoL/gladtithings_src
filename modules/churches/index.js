@@ -165,7 +165,7 @@ class Churches extends Component {
             }
           }}
         >
-          {data.length === 0 && !isLoading && <View style={{
+          {d.length === 0 && !isLoading && <View style={{
             padding: 20
           }}>
             <EmptyMessage message={language.churches.empty} /></View>}
