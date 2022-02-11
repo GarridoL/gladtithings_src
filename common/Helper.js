@@ -106,50 +106,6 @@ export default {
   },
   defaultLanguage: English,
   cashInMethods: [{
-    title: 'Unionbank of the Philippines',
-    description: 'Unionbank Authorized',
-    fees: 'Zero Fees',
-    type: 'bank',
-    logo: require('assets/union.png'),
-    color: '#FFA300',
-    code: 'UBP',
-    country: 'Philippines',
-    currency: 'PHP',
-    feeConfiguration: {
-      type: 'fixed',
-      amount: 10
-    }
-  }, 
-  // {
-  //   title: 'GCASH',
-  //   description: 'GCash Authorized',
-  //   fees: 'Zero Fees',
-  //   logo: require('assets/gcash.png'),
-  //   color: '#297bfa',
-  //   type: 'ewallet',
-  //   code: 'GCASH',
-  //   country: 'Philippines',
-  //   feeConfiguration: {
-  //     type: 'fixed',
-  //     amount: 0,
-  //     currency: 'PHP'
-  //   }
-  // }, 
-  {
-    title: 'PayMaya',
-    description: 'PayMaya Authorized',
-    fees: 'Zero Fees',
-    logo: require('assets/paymaya.png'),
-    color: Color.success,
-    code: 'PAYMAYA',
-    type: 'ewallet',
-    country: 'Philippines',
-    currency: 'PHP',
-    feeConfiguration: {
-      type: 'percentage',
-      amount: 3
-    }
-  }, {
     title: 'VISA DIRECT',
     description: 'Accepts Credit / Debit Card',
     fees: 'Zero Fees',
@@ -164,20 +120,6 @@ export default {
       amount: 2
     }
   },
-  // {
-  //   title: 'GrabPay',
-  //   description: 'GrabPay Wallet',
-  //   fees: 'Fees Apply',
-  //   logo: require('assets/grabpay.png'),
-  //   color: Color.success,
-  //   code: 'GRABPAY',
-  //   country: 'International',
-  //   feeConfiguration: {
-  //     type: 'fixed',
-  //     amount: 10,
-  //     currency: 'PHP'
-  //   }
-  // },
   {
     title: 'PayPal',
     description: 'PayPal Authorized',
