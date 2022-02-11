@@ -46,6 +46,9 @@ import PaymentCardsStack from 'components/Payments/Cards/Drawer';
 import AttendedEvents from 'src/modules/attendedEvents/Drawer';
 import ViewEvent from 'src/modules/events/viewEvent/Drawer';
 import AccountPosts from 'src/modules/accountPosts/Drawer';
+import UnionBankStack from 'components/Payments/UnionBank/Drawer';
+import PayMayaStack from 'components/Payments/PayMaya/Drawer';
+import VisaStack from 'components/Payments/Visa/Drawer'
 
 const WelcomeStack = createStackNavigator(
   {
@@ -141,7 +144,10 @@ const PrimaryNav = createStackNavigator(
     paymentCardsStack: { screen: PaymentCardsStack},
     eventSettingsStack: { screen: AttendedEvents},
     viewEventStack: { screen: ViewEvent },
-    accountPostsStack: { screen: AccountPosts }
+    accountPostsStack: { screen: AccountPosts },
+    visaStack: { screen: VisaStack},
+    unioBankStack: { screen: UnionBankStack},
+    payMayaStack: {screen: PayMayaStack}
   },
   {
     // Default config for all screens
