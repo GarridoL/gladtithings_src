@@ -17,7 +17,6 @@ class HeaderOptions extends Component {
   render() {
     const { theme, language } = this.props.state;
     const { params } = this.props.navigationProps.state;
-    console.log(params, '----------')
     return (
       <View style={{
         flexDirection: 'row',
