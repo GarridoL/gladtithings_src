@@ -333,7 +333,7 @@ class CustomizedHeader extends Component {
     const { theme } = this.props.state;
     return (
       <View style={{
-        height: height / 4,
+        height: height / 3.5,
         backgroundColor: this.props.version != 3 ? (theme ? theme.primary : Color.primary) : ('#C4C4C4'),
         borderBottomRightRadius: this.props.version != 3 ? 30 : 50,
         borderBottomLeftRadius: this.props.version != 3 ? 30 : 50,
