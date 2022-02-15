@@ -128,7 +128,6 @@ class Slider2 extends Component {
       >
         <NotificationsHandler notificationHandler={ref => (this.notificationHandler = ref)} />
         <View style={{
-          height: '100%',
           marginTop: Platform.OS == 'ios' ? 50 : 0,
         }}>
           <View style={{
@@ -207,11 +206,10 @@ class Slider2 extends Component {
         </View>
         <View style={[styles.navSectionStyle, {
           borderBottomWidth: 0,
-          flex: 1,
-          position: 'absolute',
-          bottom: 15,
           width: width,
-          paddingRight: 10
+          padding: 20,
+          display: 'flex',
+          marginTop: 50
         }]}>
           <View style={{
             marginBottom: 50
@@ -222,7 +220,8 @@ class Slider2 extends Component {
                   <TouchableOpacity style={[
                     styles.navSectionStyle, {
                       flexDirection: 'row-reverse',
-                      paddingBottom: 5,
+                      marginTop: 5,
+                      marginBottom: 5
                     }
                   ]}
                     key={index}
