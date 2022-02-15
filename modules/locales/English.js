@@ -68,22 +68,6 @@ export default {
       borderBottom: false,
       payload: 'drawer',
       currentPage: 'Settings'
-    },
-    {
-      title: 'Deposit',
-      route: 'directCashInStack',
-      icon: faWallet,
-      borderBottom: false,
-      payload: 'drawerStack',
-      currentPage: 'Deposit'
-    },
-    {
-      title: 'Withdraw',
-      route: 'withdrawStack',
-      icon: faCreditCard,
-      borderBottom: false,
-      payload: 'drawerStack',
-      currentPage: 'Deposit'
     }
   ],
   DrawerMenu1: [{

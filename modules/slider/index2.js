@@ -36,7 +36,7 @@ class Slider2 extends Component {
       return
     }
     this.props.navigation.toggleDrawer();
-    this.props.navigation.navigate(route, {page: page});
+    this.props.navigation.navigate(route, { page: page });
   }
 
   navigate = (item) => {
@@ -201,70 +201,71 @@ class Slider2 extends Component {
               </Text>
             )
           }
-
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            style={{
-              marginTop: height / 3.7,
-              position: 'absolute',
-              right: 0,
-              height: '47%',
-            }}>
-            <View style={{
-              alignItems: 'flex-end',
-              height: '100%'
-            }}>
-              {language.DrawerMenu.length > 0 &&
-                language.DrawerMenu.map((item, index) => {
-                  return (
-                    <TouchableOpacity style={[
-                      styles.navSectionStyle, {
-                        flexDirection: 'row-reverse',
-                        width: '200%',
-                        paddingBottom: 5
-                      }
-                    ]}
-                      key={index}
-                      onPress={() =>
-                        this.navigateToScreen(item.route, item.route)
-                      }>
-                      <View style={styles.inActiveDrawer}>
-                        <FontAwesomeIcon style={{
-                          padding: 10,
-                          color: Color.secondary
-                        }} icon={item.icon} size={BasicStyles.iconSize}></FontAwesomeIcon>
-                        <Text style={styles.BottomText}>{item.title}</Text>
-                      </View>
-                    </TouchableOpacity>
-                  )
-                })
-              }
-            </View>
-          </ScrollView>
         </View>
-        <View style={[styles.navSectionStyle, { borderBottomWidth: 0, flex: 1, position: 'absolute', bottom: 15, borderTopWidth: 1, width: width, borderColor: 'white', paddingRight: 10 }]}>
-          {language.DrawerMenu1.map((item, index) => {
-            return (
-              <TouchableOpacity onPress={() => { this.navigateToScreen(item.route, item.route) }} style={{ flexDirection: 'row-reverse', paddingTop: 10 }}>
-                <FontAwesomeIcon style={[
-                  styles.navItemStyle, {
-                    color: Color.secondary,
-                    marginRight: 10,
-                    fontSize: 16
-                  }]} icon={item.icon} size={BasicStyles.iconSize}></FontAwesomeIcon>
-                <Text style={styles.BottomText}>{item.title}</Text>
-              </TouchableOpacity>
-            )
-          })}
-          <TouchableOpacity onPress={() => { this.logoutAction() }} style={{ flexDirection: 'row-reverse', paddingTop: 10 }}>
-            <FontAwesomeIcon style={[
-              styles.navItemStyle, {
-                color: Color.secondary,
-                marginRight: 10,
-                fontSize: 16
-              }]} icon={faSignOutAlt} size={BasicStyles.iconSize}></FontAwesomeIcon>
-            <Text style={styles.BottomText}>Logout</Text>
-          </TouchableOpacity>
+        <View style={[styles.navSectionStyle, {
+          borderBottomWidth: 0,
+          flex: 1,
+          position: 'absolute',
+          bottom: 15,
+          width: width,
+          paddingRight: 10
+        }]}>
+          <View style={{
+            marginBottom: 50
+          }}>
+            {language.DrawerMenu.length > 0 &&
+              language.DrawerMenu.map((item, index) => {
+                return (
+                  <TouchableOpacity style={[
+                    styles.navSectionStyle, {
+                      flexDirection: 'row-reverse',
+                      paddingBottom: 5,
+                    }
+                  ]}
+                    key={index}
+                    onPress={() =>
+                      this.navigateToScreen(item.route, item.route)
+                    }>
+                    <View style={styles.inActiveDrawer}>
+                      <FontAwesomeIcon style={{
+                        padding: 10,
+                        color: Color.secondary
+                      }} icon={item.icon} size={BasicStyles.iconSize}></FontAwesomeIcon>
+                      <Text style={styles.BottomText}>{item.title}</Text>
+                    </View>
+                  </TouchableOpacity>
+                )
+              })
+            }
+          </View>
+          <View style={{
+            borderTopWidth: 1,
+            borderColor: 'white',
+            paddingTop: 10
+          }}>
+            {language.DrawerMenu1.map((item, index) => {
+              return (
+                <TouchableOpacity onPress={() => { this.navigateToScreen(item.route, item.route) }} style={{ flexDirection: 'row-reverse', paddingTop: 10 }}>
+                  <FontAwesomeIcon style={[
+                    styles.navItemStyle, {
+                      color: Color.secondary,
+                      marginRight: 10,
+                      fontSize: 16
+                    }]} icon={item.icon} size={BasicStyles.iconSize}></FontAwesomeIcon>
+                  <Text style={styles.BottomText}>{item.title}</Text>
+                </TouchableOpacity>
+              )
+            })}
+            <TouchableOpacity onPress={() => { this.logoutAction() }} style={{ flexDirection: 'row-reverse', paddingTop: 10 }}>
+              <FontAwesomeIcon style={[
+                styles.navItemStyle, {
+                  color: Color.secondary,
+                  marginRight: 10,
+                  fontSize: 16
+                }]} icon={faSignOutAlt} size={BasicStyles.iconSize}></FontAwesomeIcon>
+              <Text style={styles.BottomText}>Logout</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </LinearGradient>
     );
