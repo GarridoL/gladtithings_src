@@ -131,7 +131,12 @@ class NotificationHandler extends Component {
         console.log(data, '================from subscription------------------')
         this.playSound()
       }
-      break
+        break
+      case 'attend-event': {
+        console.log(data, '================from attend event------------------')
+        this.playSound()
+      }
+        break
     }
   }
 

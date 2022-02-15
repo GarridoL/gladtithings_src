@@ -53,11 +53,13 @@ class ViewEvent extends Component {
     this.setState({ loadingEvent: true })
     console.log(Routes.eventAttendeesCreate, {
       event_id: event.id,
-      account_id: this.props.state.user.id
+      account_id: this.props.state.user.id,
+      event_name: event.name
     });
     Api.request(Routes.eventAttendeesCreate, {
       event_id: event.id,
-      account_id: this.props.state.user.id
+      account_id: this.props.state.user.id,
+      event_name: event.name
     }, response => {
       this.setState({ loadingEvent: false })
       if (response.data > 0) {
