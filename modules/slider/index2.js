@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import styles from './Style';
 import { NavigationActions, StackActions } from 'react-navigation';
-import { ScrollView, Text, View, Image, Share, TouchableOpacity } from 'react-native';
+import { ScrollView, Text, View, Image, Share, TouchableOpacity, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import { Helper, BasicStyles, Color } from 'common';
 import Config from 'src/config.js';
@@ -128,49 +128,44 @@ class Slider2 extends Component {
       >
         <NotificationsHandler notificationHandler={ref => (this.notificationHandler = ref)} />
         <View style={{
-          flexDirection: 'row',
-          height: '100%'
+          height: '100%',
+          marginTop: Platform.OS == 'ios' ? 50 : 0,
         }}>
-          <View
-            style={{
-              height: '100%',
-              width: '100%'
+          <View style={{
+            flexDirection: 'row',
+            display: 'flex',
+            alignItems: 'center',
+            height: 50
+          }}>
+            <View
+              style={{
+                width: '50%'
+              }}>
+              <TouchableOpacity style={{
+                marginLeft: 10
+              }}
+                onPress={() => this.props.navigation.toggleDrawer()}
+              >
+                <FontAwesomeIcon
+                  color={Color.white}
+                  icon={faTimes}
+                  size={BasicStyles.iconSize}
+                />
+              </TouchableOpacity>
+            </View>
+            <View style={{
+              width: '50%',
+              paddingRight: 20
             }}>
-            <TouchableOpacity style={{
-              marginTop: '2%',
-              marginLeft: 10
-            }}
-              onPress={() => this.props.navigation.toggleDrawer()}
-            >
-              <FontAwesomeIcon
-                color={Color.white}
-                icon={faTimes}
-                size={BasicStyles.iconSize}
-              />
-            </TouchableOpacity>
-          </View>
-          {
-            user !== null ? (
-              <View style={{ marginTop: '7%', position: 'absolute', right: 10, width: '75%' }}>
+            {
+              user !== null ? (
                 <View
                   style={{
                     flex: 1,
                     flexDirection: 'row',
-                    position: 'absolute',
-                    right: 0,
-                    justifyContent: 'center',
+                    justifyContent: 'flex-end',
                     alignItems: 'center'
                   }}>
-                  <Text numberOfLines={1} style={{
-                    color: Color.white,
-                    fontFamily: 'Poppins-SemiBold',
-                    marginRight: 10,
-                    width: '80%',
-                    fontSize: 16,
-                    textAlign: 'right'
-                  }}>
-                    {user?.account_information?.first_name ? user?.account_information.first_name + ' ' + user?.account_information.last_name : user?.username}
-                  </Text>
                   <TouchableOpacity onPress={() => this.props.navigation.navigate('profileStack')}>
                     {user?.account_profile?.url ? <Image
                       source={{ uri: Config.BACKEND_URL + user?.account_profile.url }}
@@ -190,17 +185,25 @@ class Slider2 extends Component {
                       />
                     }
                   </TouchableOpacity>
+                  <Text numberOfLines={1} style={{
+                    color: Color.white,
+                    fontFamily: 'Poppins-SemiBold',
+                    fontSize: 16,
+                    paddingLeft: 10
+                  }}>
+                    {user?.account_information?.first_name ? user?.account_information.first_name + ' ' + user?.account_information.last_name : user?.username}
+                  </Text>
                 </View>
-              </View>
-            ) : (
-              <Text style={[styles.sectionHeadingStyle, {
-                paddingTop: 150,
-                backgroundColor: theme ? theme.primary : Color.primary
-              }]}>
-                Welcome to {Helper.company}!
-              </Text>
-            )
-          }
+              ) : (
+                <Text style={[styles.sectionHeadingStyle, {
+                  backgroundColor: theme ? theme.primary : Color.primary
+                }]}>
+                  Welcome to {Helper.company}!
+                </Text>
+              )
+            }
+            </View>
+          </View>
         </View>
         <View style={[styles.navSectionStyle, {
           borderBottomWidth: 0,
