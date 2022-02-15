@@ -1,5 +1,5 @@
 import Color from './Color';
-import { Dimensions } from 'react-native';
+import { Dimensions, Platform } from 'react-native';
 const width = Math.round(Dimensions.get('window').width);
 const borderRadius = 12
 export default {
@@ -305,7 +305,8 @@ export default {
       fontSize: 12,
       width: '100%',
       backgroundColor: Color.containerBackground,
-      height: 60
+      height: 60,
+      marginTop: Platform.OS == 'ios' ? 15 : 0
     },
     headerTitleContainerStyle: {
       backgroundColor: Color.containerBackground,
