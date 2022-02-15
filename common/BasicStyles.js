@@ -292,7 +292,8 @@ export default {
     headerStyle: {
       shadowColor: 'transparent',
       elevation: 0,
-      borderBottomWidth: 0
+      borderBottomWidth: 0,
+      marginTop: Platform.OS == 'ios' ? 15 : 0
     }
   },
   drawerHeader1: {
