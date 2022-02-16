@@ -49,26 +49,7 @@ const eventSettingsStack = createStackNavigator({
     navigationOptions: ({navigation}) => ({
       title: 'Events I Attended',
       headerLeft: <HeaderOptionsConnect navigationProps={navigation} />,
-      ...{
-				headerStyle: {
-					elevation: 0,
-					backgroundColor: Color.primary,
-					height: 60,
-					justifyContent: 'center',
-					alignItems: 'center',
-					fontSize: 18
-				},
-				headerTitleContainerStyle: {
-					backgroundColor: Color.primary,
-					justifyContent: 'center',
-					alignItems: 'center',
-					paddingRight: 64
-				},
-				headerTitleStyle: {
-					fontFamily: 'Poppins-SemiBold',
-					color: 'white'
-				},
-			}
+      ...BasicStyles.headerDrawerStyle
     }),
   },
 });
