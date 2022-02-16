@@ -203,6 +203,9 @@ class HomePage extends Component {
           })
         })
       }
+    }, error => {
+      console.log(error)
+      this.setState({ isLoading1: false })
     });
   }
 
