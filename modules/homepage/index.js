@@ -170,7 +170,7 @@ class HomePage extends Component {
     console.log(Routes.merchantsRetrieve, parameter)
     Api.request(Routes.merchantsRetrieve, parameter, response => {
       this.setState({ isLoading1: false })
-      console.log('[RESPONSE]', response)
+      console.log('[RESPONSE] CHURCH ', response)
       if (response.data.length > 0) {
         let temp = [];
         response.data.map((item, index) => {
@@ -182,6 +182,7 @@ class HomePage extends Component {
             let currentDay = new Date().getDay();
             if (items.title === days[currentDay]) {
               items.schedule.length > 0 && items.schedule.map((i, ind) => {
+                console.log(i, '---')
                 let a = i.startTime.split(':')
                 let b = i.endTime.split(':')
                 let aIsAm = parseInt(a[0]) <= 12 ? 'AM' : 'PM'
@@ -203,6 +204,9 @@ class HomePage extends Component {
           })
         })
       }
+    }, error => {
+      console.log(error)
+      this.setState({ isLoading1: false })
     });
   }
 
