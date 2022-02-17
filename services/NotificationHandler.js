@@ -147,6 +147,11 @@ class NotificationHandler extends Component {
         this.playSound()
       }
         break
+      case 'direct-transfer': {
+        console.log(data)
+        this.playSound()
+      }
+        break
     }
   }
 
