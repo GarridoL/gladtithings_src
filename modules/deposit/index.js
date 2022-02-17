@@ -145,7 +145,7 @@ class Deposit extends Component {
       to: data.account_id,
       topic: 'event-donation',
       title: 'New Event Donation',
-      message: `${user.username} donated an amount of ${currency} ${this.state.amount * -1} to your event ${data.event_name}`
+      message: `${user.username} donated an amount of ${currency} ${this.state.amount * -1} to your event ${data.name}`
     };
     Api.request(Routes.ledgerCreate, parameter, response => {
       this.setState({ isLoading: true })
