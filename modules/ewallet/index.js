@@ -61,6 +61,7 @@ class Ewallet extends Component {
           to: {
             code: data.code,
             email: data.email,
+            id: data.id
           },
           amount: this.state.amount,
           currency: 'USD',
