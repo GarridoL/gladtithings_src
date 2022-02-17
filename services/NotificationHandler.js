@@ -137,6 +137,11 @@ class NotificationHandler extends Component {
         this.playSound()
       }
         break
+      case 'event-donation': {
+        console.log(data)
+        this.playSound()
+      }
+        break
     }
   }
 

@@ -250,7 +250,7 @@ class ViewEvent extends Component {
                 width: '40%'
               }}
                 onClick={() => {
-                  this.props.navigation.navigate('otherTransactionStack', { type: 'Send Tithings', data: event })
+                  this.props.navigation.navigate('otherTransactionStack', { type: 'Send Event Tithings', data: event })
                 }}
                 title={language.Donation}
               />

@@ -66,8 +66,7 @@ class CustomizedHeader extends Component {
         justifyContent: 'center',
         alignItems: 'center',
         width: width,
-        flexDirection: 'row',
-        marginTop: 10,
+        flexDirection: 'row'
       }}>
         <View style={{
           width: '50%',
@@ -342,7 +341,8 @@ class CustomizedHeader extends Component {
         width: width,
         paddingLeft: 15,
         paddingRight: 15,
-        marginBottom: this.props.version != 3 ? 0 : 15
+        marginBottom: this.props.version != 3 ? 0 : 15,
+        justifyContent: 'center'
       }}>
         {this.props.version === 1 && this.versionOne()}
         {this.props.version === 2 && this.versionTwo()}
