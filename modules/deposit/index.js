@@ -172,7 +172,18 @@ class Deposit extends Component {
       amount: this.state.amount,
       details: tempDetails,
       currency: currency,
-      description: tempDesc,
+      description: tempDesc
+    }
+    if(tempDetails === 'church_donation') {
+      parameter = {
+        parameter,
+        ...{
+          to: data.account_id,
+          topic: 'church-donation',
+          title: 'New Church Donation',
+          message: `${user.username} donated an amount of ${currency} ${this.state.amount} to your church.`
+        }
+      }
     }
     this.setState({ isLoading: true });
     Api.request(Routes.sendDirectCreate, parameter, response => {
