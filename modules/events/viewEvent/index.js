@@ -54,12 +54,14 @@ class ViewEvent extends Component {
     console.log(Routes.eventAttendeesCreate, {
       event_id: event.id,
       account_id: this.props.state.user.id,
-      event_name: event.name
+      event_name: event.name,
+      username: this.props.state.user.username
     });
     Api.request(Routes.eventAttendeesCreate, {
       event_id: event.id,
       account_id: this.props.state.user.id,
-      event_name: event.name
+      event_name: event.name,
+      username: this.props.state.user.username
     }, response => {
       this.setState({ loadingEvent: false })
       if (response.data > 0) {

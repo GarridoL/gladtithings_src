@@ -59,6 +59,7 @@ export default {
   paypalCreateOrder: apiUrl + 'paypal/create_order',
   paypalCaptureOrder: apiUrl + 'paypal/capture_order',
   uploadImage: apiUrl + 'payloads/create',
+  deleteIds: apiUrl + 'payloads/delete_payloads',
   imageUploadBase64: apiUrl + 'images/upload_base64',
   imageUploadUnLink: apiUrl + 'images/upload_un_link',
   commentsRetrieveWithImages: apiUrl + 'comments/retrieve_comments_with_images',
