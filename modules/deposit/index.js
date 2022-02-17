@@ -176,16 +176,14 @@ class Deposit extends Component {
     }
     if(tempDetails === 'church_donation') {
       parameter = {
-        parameter,
-        ...{
-          to: data.account_id,
-          topic: 'church-donation',
-          title: 'New Church Donation',
-          message: `${user.username} donated an amount of ${currency} ${this.state.amount} to your church.`
-        }
+        topic: 'church-donation',
+        title: 'New Church Donation',
+        message: `${user.username} donated an amount of ${currency} ${this.state.amount} to your church.`,
+        ...parameter,
       }
     }
     this.setState({ isLoading: true });
+    console.log(Routes.sendDirectCreate, parameter, user.token)
     Api.request(Routes.sendDirectCreate, parameter, response => {
       this.setState({ isLoading: false });
       if (response.data) {
