@@ -186,6 +186,29 @@ export default {
       fontFamily: 'Poppins-SemiBold',
     },
   },
+  headerDrawerStylePrimary: {
+    headerStyle: {
+      elevation: 0,
+      backgroundColor: Color.primary,
+      height: 60,
+      justifyContent: 'center',
+      alignItems: 'center',
+      fontSize: 18,
+      width: width,
+      borderBottomColor: Color.primary
+    },
+    headerTitleContainerStyle: {
+      backgroundColor: Color.primary,
+      justifyContent: 'center',
+      alignItems: 'center',
+      paddingRight: 64,
+      width: '90%',
+      borderBottomColor: Color.primary
+    },
+    headerTitleStyle: {
+      fontFamily: 'Poppins-SemiBold',
+    },
+  },
   headerDrawerStyleStandard: {
     headerStyle: {
       elevation: 0,
