@@ -25,14 +25,52 @@ class Events extends Component {
       events: [],
       limit: 8,
       offset: 0,
-      currency: 'PHP',
+      currency: 'USD',
       loadingEvent: false
     }
   }
 
   componentDidMount() {
     this.retrieveEvents(false)
-    this.setState({ currency: this.props.state.ledger?.currency || 'PHP' })
+    this.setState({ currency: this.props.state.ledger?.currency || 'USD' })
+  }
+
+  retrieveLedger = (currency) => {
+    const { user } = this.props.state;
+    const { amount } = this.state;
+    let parameter = {
+      condition: [
+        {
+          clause: '=',
+          column: 'account_id',
+          value: user.id
+        }
+      ],
+      account_code: user.code,
+      account_id: user.id
+    }
+    console.log(Routes.ledgerSummary, parameter);
+    this.setState({ isLoading: true })
+    Api.request(Routes.ledgerSummary, parameter, response => {
+      this.setState({ isLoading: false })
+      if(response.data.length > 0) {
+        let ledger = response.data.filter(item => item.currency == currency);
+        console.log(ledger, currency)
+        if(ledger.length > 0) {
+          this.setState({ledger: ledger[0]})
+          if(parseFloat(ledger[0].available_balance) >= parseFloat(amount)) {
+            this.createLedger()
+          } else {
+            Alert.alert('Payment Error', 'Cash in more to donate this kind of amount.');
+          }
+        } else {
+          Alert.alert('Payment Error', 'You have no balance for this currency.');
+        }
+      }
+    }, error => {
+      console.log(error);
+      this.setState({ isLoading: false })
+    });
   }
 
   retrieveEvents = (flag) => {
@@ -74,8 +112,9 @@ class Events extends Component {
   }
 
   createPayment = async () => {
-    if (this.state.amount !== null && this.state.amount > 0) {
-      this.createLedger();
+    const { amount, currency } = this.state;
+    if (amount !== null && amount > 0) {
+      this.retrieveLedger(currency);
     } else {
       Alert.alert('Donation Error', 'You are missing your amount.');
     }
@@ -105,8 +144,8 @@ class Events extends Component {
   };
 
   render() {
-    const { theme, user, paypalUrl } = this.props.state;
-    const { donate, amount, events, isLoading, loadingEvent } = this.state;
+    const { theme, user } = this.props.state;
+    const { donate, events, isLoading, loadingEvent, currency } = this.state;
     return (
       <View style={{ backgroundColor: Color.containerBackground }}>
         <ScrollView showsVerticalScrollIndicator={false}
@@ -201,8 +240,7 @@ class Events extends Component {
                   }}>
                     <AmountInput
                       onChange={(amount, currency) => this.setState({
-                        amount: amount,
-                        currency: currency
+                        amount: amount
                       })
                       }
                       maximum={(user && Helper.checkStatus(user) >= Helper.accountVerified) ? Helper.MAX_VERIFIED : Helper.MAX_NOT_VERIFIED}

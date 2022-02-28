@@ -170,15 +170,10 @@ class TransactionDetails extends Component {
               { data?.details?.account &&
                 <View>
                   <View style={{
-                    height: 50,
                     justifyContent: 'center',
                     borderBottomWidth: 1,
                     borderBottomColor: Color.lightGray
                   }}>
-                    <Text style={{
-                      fontWeight: 'bold',
-                      fontSize: BasicStyles.standardFontSize
-                    }}>{data?.details?.type === 'receive' ? 'From' : 'To'}</Text>
                   </View>
                   <View style={{
                     height: 50,
@@ -189,7 +184,7 @@ class TransactionDetails extends Component {
                     <Text style={{
                       fontSize: BasicStyles.standardFontSize,
                       width: '50%'
-                    }}>Account Code:</Text>
+                    }}>{data?.details?.type === 'receive' ? 'From' : 'To'}</Text>
 
                     <Text style={{
                       fontSize: BasicStyles.standardFontSize,

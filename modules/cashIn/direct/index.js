@@ -26,7 +26,7 @@ class Stack extends Component {
     this.state = {
       isLoading: false,
       amount: null,
-      currency: 'PHP',
+      currency: 'USD',
       selected: [],
       charge: null,
       total: null
@@ -34,7 +34,7 @@ class Stack extends Component {
   }
 
   componentDidMount = () => {
-    this.setState({ currency: this.props.state.ledger?.currency || 'PHP' })
+    this.setState({ currency: this.props.state.ledger?.currency || 'USD' })
   }
 
   managePayment = (item) => {

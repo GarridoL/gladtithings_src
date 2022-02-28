@@ -304,8 +304,8 @@ class Deposit extends Component {
                     alignItems: 'center',
                     width: width,
                     backgroundColor: theme ? theme.primary : Color.primary,
-                    borderTopRightRadius: 30,
-                    borderTopLeftRadius: 30,
+                    borderBottomRightRadius: 30,
+                    borderBottomLeftRadius: 30,
                   }}>
                   <FontAwesomeIcon
                     icon={faChurch}

@@ -162,8 +162,10 @@ class HomePage extends Component {
     let parameter = {
       sort: { created_at: 'asc' },
       masses: {
-        latitude: region.latitude,
-        longitude: region.longitude
+        // latitude: region.latitude,
+        // longitude: region.longitude
+        latitude: 10.3241515,
+        longitude: 123.9099824
       }
     }
     this.setState({ isLoading1: true })

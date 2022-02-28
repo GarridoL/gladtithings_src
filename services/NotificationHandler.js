@@ -152,6 +152,11 @@ class NotificationHandler extends Component {
         this.playSound()
       }
         break
+      case 'cash-in': {
+        console.log(data)
+        this.playSound()
+      }
+        break
     }
   }
 
