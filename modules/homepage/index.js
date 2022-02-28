@@ -138,6 +138,10 @@ class HomePage extends Component {
         value: new Date(),
         column: 'start_date',
         clause: '>'
+      }, {
+        clause: '!=',
+        column: 'account_id',
+        value: user.id
       }],
       sort: { created_at: 'asc' },
       limit: limit,
@@ -163,6 +167,11 @@ class HomePage extends Component {
     const { days, region } = this.state;
     let parameter = {
       sort: { created_at: 'asc' },
+      condition: [{
+        clause: '!=',
+        column: 'account_id',
+        value: this.props.state.user.id
+      }],
       masses: {
         // latitude: region.latitude,
         // longitude: region.longitude

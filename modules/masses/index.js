@@ -70,8 +70,14 @@ class Masses extends Component {
 
   retrieveChurches = () => {
     const { region, offset, limit, churches } = this.state;
+    const { user } = this.props.state;
     let parameter = {
       sort: { created_at: 'asc' },
+      condition: [{
+        value: user.id,
+        column: 'account_id',
+        clause: '!='
+      }],
       masses: {
         latitude: region.latitude,
         longitude: region.longitude
