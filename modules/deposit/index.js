@@ -78,12 +78,12 @@ class Deposit extends Component {
     this.setState({ isLoading: true })
     Api.request(Routes.ledgerSummary, parameter, response => {
       this.setState({ isLoading: false })
-      if(response.data.length > 0) {
+      if (response.data.length > 0) {
         let ledger = response.data.filter(item => item.currency == currency);
         console.log(ledger, currency)
-        if(ledger.length > 0) {
-          this.setState({ledger: ledger[0]})
-          if(parseFloat(ledger[0].available_balance) >= parseFloat(amount)) {
+        if (ledger.length > 0) {
+          this.setState({ ledger: ledger[0] })
+          if (parseFloat(ledger[0].available_balance) >= parseFloat(amount)) {
             if (this.props.navigation?.state?.params?.type !== 'Subscription Donation') {
               this.createLedger();
             } else {
@@ -174,7 +174,7 @@ class Deposit extends Component {
       currency: currency,
       description: tempDesc
     }
-    if(tempDetails === 'church_donation') {
+    if (tempDetails === 'church_donation') {
       parameter = {
         topic: 'church-donation',
         title: 'New Church Donation',
@@ -182,14 +182,22 @@ class Deposit extends Component {
         ...parameter,
       }
     }
+    if (tempDetails === 'subscription') {
+      parameter = {
+        topic: 'subscription',
+        title: 'New Subscription',
+        message: `You have a new subscriber to your church`,
+        ...parameter,
+      }
+    }
     this.setState({ isLoading: true });
-    console.log(Routes.sendDirectCreate, parameter, user.token)
+    console.log(Routes.sendDirectCreate, parameter, '-------------------------')
     Api.request(Routes.sendDirectCreate, parameter, response => {
       this.setState({ isLoading: false });
       if (response.data) {
-        this.props.navigation.navigate('pageMessageStack', { payload: 'success', title: 'Success' });
+        this.props.navigation.navigate('pageMessageStack', { payload: 'success', title: 'Success', data: tempDetails });
       } else {
-        this.props.navigation.navigate('pageMessageStack', { payload: 'error', title: 'Error' });
+        this.props.navigation.navigate('pageMessageStack', { payload: 'error', title: 'Error', data: tempDetails  });
       }
     },
       (error) => {
@@ -199,54 +207,48 @@ class Deposit extends Component {
     );
   };
 
-  verifyMerchant = (merchant) => {
-    let parameter = {
-      condition: [{
-        value: merchant.id,
-        clause: '=',
-        column: 'id'
-      }]
-    };
-    console.log(parameter, Routes.merchantsRetrieve);
-    this.setState({ isLoading: true })
-    Api.request(Routes.merchantsRetrieve, parameter, response => {
-      this.setState({ isLoading: false })
-      if (response.data.length > 0) {
-        return response.data[0].addition_informations
-      } else {
-        return null
-      }
-    }, error => {
-      this.setState({ isLoading: false })
-      console.log(error)
-      return null
-    });
-  }
-
   subscribe = () => {
     const { user } = this.props.state;
     const { currency } = this.state;
     const { params } = this.props.navigation.state;
-    if(this.verifyMerchant(params.data) !== 'subscription-enabled') {
-      Alert.alert('Error subscription', 'The church disabled its subscription.')
-      return
-    }
-    let parameter = {
-      account_id: user.id,
-      merchant: params.data.id,
-      amount: this.state.amount,
-      currency: currency,
-      to: params.data.account_id
+    let parameters = {
+      condition: [{
+        value: params.data?.id,
+        clause: '=',
+        column: 'id'
+      }]
     };
-    console.log(parameter, Routes.SubscriptionCreate);
-    Api.request(Routes.SubscriptionCreate, parameter, response => {
-      this.setState({ isLoading: true })
-      if (response.data != null) {
-        this.setState({ subscribeId: response.data })
-        this.createLedger()
+    this.setState({ isLoading: true })
+    Api.request(Routes.merchantsRetrieve, parameters, responses => {
+      this.setState({ isLoading: false })
+      if (responses.data.length > 0) {
+        if (responses.data[0].addition_informations !== 'subscription-enabled') {
+          Alert.alert('Error subscription', 'The church disabled its subscription.')
+          return
+        }
+        let parameter = {
+          account_id: user.id,
+          merchant: params.data.id,
+          amount: this.state.amount,
+          currency: currency,
+          to: params.data.account_id
+        };
+        Api.request(Routes.SubscriptionCreate, parameter, response => {
+          this.setState({ isLoading: true })
+          if (response.data != null) {
+            this.setState({ subscribeId: response.data })
+            this.createLedger()
+          }
+        }, error => {
+          Alert.alert('Error', error);
+        });
+      } else {
+        Alert.alert('Error subscription' + verified, 'The church disabled its subscription.')
+        return
       }
     }, error => {
-      Alert.alert('Error', error);
+      this.setState({ isLoading: false })
+      console.log(error)
     });
   }
 
