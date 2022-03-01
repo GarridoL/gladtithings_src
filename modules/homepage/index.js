@@ -173,10 +173,10 @@ class HomePage extends Component {
         value: this.props.state.user.id
       }],
       masses: {
-        // latitude: region.latitude,
-        // longitude: region.longitude
-        latitude: 10.3241515,
-        longitude: 123.9099824
+        latitude: region.latitude,
+        longitude: region.longitude
+        // latitude: 10.3241515,
+        // longitude: 123.9099824
       }
     }
     this.setState({ isLoading1: true })
