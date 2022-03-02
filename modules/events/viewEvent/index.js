@@ -26,14 +26,14 @@ class ViewEvent extends Component {
       event: [],
       limit: 8,
       offset: 0,
-      currency: 'PHP',
+      currency: 'USD',
       loadingEvent: false
     }
   }
 
   componentDidMount() {
     this.retrieveEvents()
-    this.setState({ currency: this.props.state.ledger?.currency || 'PHP' })
+    this.setState({ currency: this.props.state.ledger?.currency || 'USD' })
   }
 
   attendEvent = (item) => {

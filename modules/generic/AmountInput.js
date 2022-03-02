@@ -16,23 +16,23 @@ class AmountInput extends Component {
 
   inputHandler(amount, maximum, type){
     const { ledger} = this.props.state;
-    let convertedMaximum = Helper.convertMaximum(maximum, ledger && ledger.currency ? ledger.currency : 'PHP')
+    let convertedMaximum = Helper.convertMaximum(maximum, ledger && ledger.currency ? ledger.currency : 'USD')
     if(convertedMaximum < amount){
       this.setState({
         errorMessage: 'Maximum allowed is ' + convertedMaximum
       })
-      this.props.onChange(convertedMaximum, ledger && ledger.currency ? ledger.currency : 'PHP')
+      this.props.onChange(convertedMaximum, ledger && ledger.currency ? ledger.currency : 'USD')
     }else if(ledger && ledger.available_balance < amount && type !== 'Cash In'){
       this.setState({
         errorMessage: 'Insufficient Balance!'
       })
-      this.props.onChange(amount, ledger && ledger.currency ? ledger.currency : 'PHP')
+      this.props.onChange(amount, ledger && ledger.currency ? ledger.currency : 'USD')
     }else{
       this.setState({
         amount: amount,
         errorMessage: null
       })
-      this.props.onChange(amount, ledger && ledger.currency ? ledger.currency : 'PHP')
+      this.props.onChange(amount, ledger && ledger.currency ? ledger.currency : 'USD')
     }
   }
 
@@ -72,7 +72,7 @@ class AmountInput extends Component {
                 this.setState({
                   amount: input
                 })
-                this.props.onChange(input, ledger && ledger.currency ? ledger.currency : 'PHP')
+                this.props.onChange(input, ledger && ledger.currency ? ledger.currency : 'USD')
               }
             }}
             style={{
