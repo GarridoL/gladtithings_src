@@ -132,7 +132,7 @@ export default {
     currency: 'USD',
     feeConfiguration: {
       type: 'percentage',
-      amount: 4
+      amount: 3
     }
   }, {
     title: 'Stripe CC / DC',
@@ -146,7 +146,7 @@ export default {
     currency: 'USD',
     feeConfiguration: {
       type: 'percentage',
-      amount: 4
+      amount: 3
     }
   }],
   checkStatus(user){
