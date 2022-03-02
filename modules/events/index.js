@@ -26,11 +26,13 @@ class Events extends Component {
       limit: 8,
       offset: 0,
       currency: 'USD',
-      loadingEvent: false
+      loadingEvent: false,
+      randomEvent: null
     }
   }
 
   componentDidMount() {
+    this.retrieveRandomEvent()
     this.retrieveEvents(false)
     this.setState({ currency: this.props.state.ledger?.currency || 'USD' })
   }
@@ -71,6 +73,31 @@ class Events extends Component {
       console.log(error);
       this.setState({ isLoading: false })
     });
+  }
+
+  retrieveRandomEvent = () => {
+    const { user } = this.props.state;
+    let parameter = {
+      account_id: user.id
+    }
+    this.setState({ isLoading: true })
+    Api.request(Routes.eventRandom, parameter, response => {
+      this.setState({ isLoading: false })
+      if (response.data != null) {
+        let event = response.data
+        console.log(response.data)
+        let random = {
+          logo: event.image?.length > 0 ? event.image[0].category : null,
+          address: event.location,
+          date: '<date>',
+          name: event.name
+        }
+        this.setState({randomEvent: random})
+      }
+    }, error => {
+      console.log(error)
+      this.setState({ isLoading: false })
+    })
   }
 
   retrieveEvents = (flag) => {
@@ -145,7 +172,7 @@ class Events extends Component {
 
   render() {
     const { theme, user } = this.props.state;
-    const { donate, events, isLoading, loadingEvent, currency } = this.state;
+    const { donate, events, isLoading, loadingEvent, randomEvent } = this.state;
     return (
       <View style={{ backgroundColor: Color.containerBackground }}>
         <ScrollView showsVerticalScrollIndicator={false}
@@ -174,12 +201,13 @@ class Events extends Component {
                 this.setState({ donate: true })
               }}
               data={
-                events.length > 0 ?
+                randomEvent !== null ?
                   {
                     merchant_details: {
-                      name: events[0].name,
-                      logo: events[0].logo,
-                      address: events[0].address
+                      name: randomEvent.name,
+                      logo: randomEvent.logo,
+                      date: randomEvent.date,
+                      address: randomEvent.address
                     },
                     amount: 0
                   }
