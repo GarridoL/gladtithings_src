@@ -103,6 +103,10 @@ class HomePage extends Component {
         value: user.id,
         column: 'account_id',
         clause: '='
+      }, {
+        value: user.sub_account ? user.sub_account?.id : '%%',
+        column: 'merchant_id',
+        clause: '!='
       }],
       limit: 6,
       sort: {created_at: 'desc'}
@@ -165,12 +169,13 @@ class HomePage extends Component {
 
   retrieveChurches = () => {
     const { days, region } = this.state;
+    const { user } = this.props.state;
     let parameter = {
       sort: { created_at: 'asc' },
       condition: [{
-        clause: '!=',
+        value: user.id,
         column: 'account_id',
-        value: this.props.state.user.id
+        clause: '!='
       }],
       masses: {
         latitude: region.latitude,

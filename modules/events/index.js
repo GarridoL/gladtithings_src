@@ -55,12 +55,12 @@ class Events extends Component {
     this.setState({ isLoading: true })
     Api.request(Routes.ledgerSummary, parameter, response => {
       this.setState({ isLoading: false })
-      if(response.data.length > 0) {
+      if (response.data.length > 0) {
         let ledger = response.data.filter(item => item.currency == currency);
         console.log(ledger, currency)
-        if(ledger.length > 0) {
-          this.setState({ledger: ledger[0]})
-          if(parseFloat(ledger[0].available_balance) >= parseFloat(amount)) {
+        if (ledger.length > 0) {
+          this.setState({ ledger: ledger[0] })
+          if (parseFloat(ledger[0].available_balance) >= parseFloat(amount)) {
             this.createLedger()
           } else {
             Alert.alert('Payment Error', 'Cash in more to donate this kind of amount.');
@@ -92,7 +92,7 @@ class Events extends Component {
           date: '<date>',
           name: event.name
         }
-        this.setState({randomEvent: random})
+        this.setState({ randomEvent: random })
       }
     }, error => {
       console.log(error)
@@ -174,7 +174,10 @@ class Events extends Component {
     const { theme, user } = this.props.state;
     const { donate, events, isLoading, loadingEvent, randomEvent } = this.state;
     return (
-      <View style={{ backgroundColor: Color.containerBackground }}>
+      <View style={{
+        height: height,
+        backgroundColor: Color.containerBackground
+      }}>
         <ScrollView showsVerticalScrollIndicator={false}
           onScroll={(event) => {
             let scrollingHeight = event.nativeEvent.layoutMeasurement.height + event.nativeEvent.contentOffset.y
@@ -193,7 +196,7 @@ class Events extends Component {
           style={{
             backgroundColor: Color.containerBackground
           }}>
-          <View style={{ marginBottom: height /2, }}>
+          <View style={{ marginBottom: height / 2, }}>
             <CustomizedHeader
               version={2}
               donate={true}
@@ -230,8 +233,8 @@ class Events extends Component {
                 data={events}
                 buttonColor={theme ? theme.secondary : Color.secondary}
                 buttonTitle={'Donate'}
-                redirect={(item) => { this.props.navigation.navigate('viewEventStack', {data : item}) }}
-                buttonClick={(item) => { this.props.navigation.navigate('otherTransactionStack', { type: 'Send Event Tithings', data: item}) }}
+                redirect={(item) => { this.props.navigation.navigate('viewEventStack', { data: item }) }}
+                buttonClick={(item) => { this.props.navigation.navigate('otherTransactionStack', { type: 'Send Event Tithings', data: item }) }}
               />
               {!isLoading && events.length == 0 &&
                 <View style={{
@@ -257,29 +260,18 @@ class Events extends Component {
               <View style={{
                 padding: 20,
               }}>
-                <View style={{
-                  padding: 20,
-                }}>
-                  <View style={{
-                    borderWidth: 1,
-                    borderColor: Color.lightGray,
-                    padding: 15,
-                    borderRadius: 10
-                  }}>
-                    <AmountInput
-                      onChange={(amount, currency) => this.setState({
-                        amount: amount
-                      })
-                      }
-                      maximum={(user && Helper.checkStatus(user) >= Helper.accountVerified) ? Helper.MAX_VERIFIED : Helper.MAX_NOT_VERIFIED}
-                      type={{
-                        type: 'Cash In'
-                      }}
-                      disableRedirect={false}
-                      navigation={this.props.navigation}
-                    />
-                  </View>
-                </View>
+                <AmountInput
+                  onChange={(amount, currency) => this.setState({
+                    amount: amount
+                  })
+                  }
+                  maximum={(user && Helper.checkStatus(user) >= Helper.accountVerified) ? Helper.MAX_VERIFIED : Helper.MAX_NOT_VERIFIED}
+                  type={{
+                    type: 'Cash In'
+                  }}
+                  disableRedirect={false}
+                  navigation={this.props.navigation}
+                />
               </View>
             }
           </View>
