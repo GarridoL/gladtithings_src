@@ -63,8 +63,10 @@ class Churches extends Component {
         clause: '!='
       }],
       masses: {
-        latitude: region.latitude,
-        longitude: region.longitude
+        latitude: 10.3241515,
+        longitude: 123.9099824
+        // latitude: region.latitude,
+        // longitude: region.longitude
       }
     }
     console.log(parameter, Routes.merchantsRetrieve);

@@ -3,6 +3,7 @@ import { Dimensions, Platform } from 'react-native';
 const width = Math.round(Dimensions.get('window').width);
 const borderRadius = 12
 export default {
+  inputBorderRadius: 25,
   buttonBorderRadius: 20,
   elevation: 0,
   formControl: {

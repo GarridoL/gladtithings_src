@@ -189,4 +189,17 @@ export default {
       case 'thb': return parseInt(maximum / 1.50);
     }
   },
+  cycles:[{
+    value: 'monthly',
+    title: 'Monthly'
+  }, {
+    value: 'quarterly',
+    title: 'Quarterly'
+  }, {
+    value: 'semi-annually',
+    title: 'Semi-annually'
+  }, {
+    value: 'annually',
+    title: 'Annually'
+  }]
 };
