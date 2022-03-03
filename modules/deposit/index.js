@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, Dimensions, Alert } from 'react-native';
-import { Color, Routes, Helper } from 'common';
+import { View, Text, ScrollView, Dimensions, Alert, TouchableOpacity } from 'react-native';
+import { Color, Routes, Helper, BasicStyles } from 'common';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faChurch } from '@fortawesome/free-solid-svg-icons';
@@ -22,7 +22,9 @@ class Deposit extends Component {
       isLoading: false,
       subscribeId: null,
       currency: 'USD',
-      ledger: null
+      ledger: null,
+      cycle: null,
+      radioSelected: null
     };
   }
 
@@ -42,6 +44,54 @@ class Deposit extends Component {
         onPress: () => this.proceed(),
       },
     ]);
+  }
+
+  cycle = () => {
+    const { cycle, radioSelected } = this.state;
+    const { theme } = this.props.state;
+    return (
+      <View style={{flexWrap: 'wrap', flex: 1}}>
+      {Helper.cycles.map((val) => {
+        return (
+          <TouchableOpacity
+            style={{ flexDirection: 'row', alignContent: 'center', alignItems: 'center', 
+            justifyContent: 'center', }}
+            key={val.value} onPress={() => {
+              this.setState({
+                cycle: val.value
+              })
+            }}>
+            <View style={{
+              height: 24,
+              width: 24,
+              borderRadius: 12,
+              borderWidth: 2,
+              borderColor: theme ? theme.primary : Color.primary,
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderWidth: 1,
+              marginTop: '5%',
+            }}>
+              {
+                val.value == (cycle != null ? cycle : radioSelected) ?
+                  <View style={{
+                    height: 12,
+                    width: 12,
+                    borderRadius: 6,
+                    backgroundColor: theme ? theme.primary : Color.primary
+                  }} />
+                  : null
+              }
+            </View>
+            <Text style={{
+              // flexDirection: 'column',
+              marginTop: '5%', marginLeft: '5%'
+            }}>{val.title}</Text>
+          </TouchableOpacity>
+        )
+      })}
+    </View>
+    );
   }
 
   proceed = () => {
@@ -104,10 +154,10 @@ class Deposit extends Component {
 
   createPayment = () => {
     let cur = this.props.state.ledger?.currency || this.state.currency;
-    if (this.state.amount !== null && this.state.amount > 0) {
+    if (this.state.amount !== null && this.state.amount > 0 && this.state.cycle !== null) {
       this.retrieveLedger(cur)
     } else {
-      Alert.alert('Payment Error', 'You are missing your amount');
+      Alert.alert('Payment Error', 'You are missing your amount and plese choose your plan.');
     }
   };
 
@@ -209,7 +259,7 @@ class Deposit extends Component {
 
   subscribe = () => {
     const { user } = this.props.state;
-    const { currency } = this.state;
+    const { currency, cycle } = this.state;
     const { params } = this.props.navigation.state;
     let parameters = {
       condition: [{
@@ -231,6 +281,7 @@ class Deposit extends Component {
           merchant: params.data.id,
           amount: this.state.amount,
           currency: currency,
+          cycle: cycle,
           to: params.data.account_id
         };
         Api.request(Routes.SubscriptionCreate, parameter, response => {
@@ -254,7 +305,7 @@ class Deposit extends Component {
 
   updatePayment = () => {
     const { user } = this.props.state;
-    const { currency } = this.state;
+    const { currency, cycle } = this.state;
     const { params } = this.props.navigation.state;
     let parameter = {
       id: params.data.id,
@@ -262,7 +313,8 @@ class Deposit extends Component {
       account_id: user.id,
       merchant: params.data.merchant,
       amount: this.state.amount === 0 ? params.data.amount : this.state.amount,
-      currency: currency
+      currency: currency,
+      cycle: cycle === null ? params.cycle : cycle
     };
     this.setState({ isLoading: true })
     Api.request(Routes.SubscriptionUpdate, parameter, response => {
@@ -364,10 +416,13 @@ class Deposit extends Component {
                 }}>
                 {
                   (this.props.navigation?.state?.params?.type === 'Edit Subscription Donation') ?
-                    <View>
+                    <View style={{alignItems: 'center'}}>
                       <Text style={{
                         fontFamily: 'Poppins-SemiBold'
                       }}>Current Amount: {data?.currency} {data?.amount}</Text>
+                      <Text style={{
+                        fontFamily: 'Poppins-SemiBold'
+                      }}>Current Schedule: {data?.cycle.toUpperCase()}</Text>
                       <AmountInput
                         onChange={(amount, currency) => this.setState({
                           amount: amount
@@ -394,6 +449,10 @@ class Deposit extends Component {
                       navigation={this.props.navigation}
                     />}
               </View>
+            </View>
+            <View style={{ width: '100%', alignItems: 'center' }}>
+              <Text style={{fontWeight: 'bold', alignItems: 'center', alignContent: 'center', marginTop: 5}}>Choose your Plan</Text>
+              {this.cycle()}
             </View>
           </View>
         </ScrollView>
