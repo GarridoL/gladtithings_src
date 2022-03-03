@@ -51,10 +51,10 @@ class HomePage extends Component {
           this.setState({
             region: {
               ...this.state.region,
-              // latitude: info.coords.latitude,
-              // longitude: info.coords.longitude
-              latitude: 10.3241515,
-              longitude: 123.9099824
+              latitude: info.coords.latitude,
+              longitude: info.coords.longitude
+              // latitude: 10.3241515,
+              // longitude: 123.9099824
             }
           }, () => {
             this.retrieveChurches()

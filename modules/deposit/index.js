@@ -367,7 +367,7 @@ class Deposit extends Component {
                     <View>
                       <Text style={{
                         fontFamily: 'Poppins-SemiBold'
-                      }}>Current Amount: {data?.amount}</Text>
+                      }}>Current Amount: {data?.currency} {data?.amount}</Text>
                       <AmountInput
                         onChange={(amount, currency) => this.setState({
                           amount: amount
