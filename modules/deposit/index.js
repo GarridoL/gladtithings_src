@@ -314,7 +314,7 @@ class Deposit extends Component {
       merchant: params.data.merchant,
       amount: this.state.amount === 0 ? params.data.amount : this.state.amount,
       currency: currency,
-      cycle: cycle
+      cycle: cycle === null ? params.cycle : cycle
     };
     this.setState({ isLoading: true })
     Api.request(Routes.SubscriptionUpdate, parameter, response => {
@@ -416,10 +416,13 @@ class Deposit extends Component {
                 }}>
                 {
                   (this.props.navigation?.state?.params?.type === 'Edit Subscription Donation') ?
-                    <View>
+                    <View style={{alignItems: 'center'}}>
                       <Text style={{
                         fontFamily: 'Poppins-SemiBold'
                       }}>Current Amount: {data?.currency} {data?.amount}</Text>
+                      <Text style={{
+                        fontFamily: 'Poppins-SemiBold'
+                      }}>Current Schedule: {data?.cycle.toUpperCase()}</Text>
                       <AmountInput
                         onChange={(amount, currency) => this.setState({
                           amount: amount
