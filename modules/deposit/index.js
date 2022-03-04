@@ -166,7 +166,12 @@ class Deposit extends Component {
     let tempDetails = null;
     let tempDesc = null;
     if (this.state.subscribeId !== null) {
-      tempDetails = 'subscription'  //this.state.subscribeId
+      tempDetails = JSON.stringify({name: 'subscription', from: {
+        id: user.id
+      },
+      to: {
+        id: data.account_id
+      }},) //this.state.subscribeId
       tempDesc = 'Subscription'
       this.sendDirectTransfer(params.data, tempDetails, tempDesc)
     } else {
