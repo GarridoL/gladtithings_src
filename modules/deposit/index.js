@@ -163,15 +163,11 @@ class Deposit extends Component {
 
   createLedger = () => {
     const { params } = this.props.navigation.state;
+    const { user } = this.props.state;
     let tempDetails = null;
     let tempDesc = null;
     if (this.state.subscribeId !== null) {
-      tempDetails = JSON.stringify({name: 'subscription', from: {
-        id: user.id
-      },
-      to: {
-        id: data.account_id
-      }},) //this.state.subscribeId
+      tempDetails = JSON.stringify({name: 'subscription', from: user.id, to: params.data.account_id}) //this.state.subscribeId
       tempDesc = 'Subscription'
       this.sendDirectTransfer(params.data, tempDetails, tempDesc)
     } else {
