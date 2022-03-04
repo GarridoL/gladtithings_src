@@ -237,7 +237,7 @@ class Deposit extends Component {
         ...parameter,
       }
     }
-    if (tempDetails === 'subscription') {
+    if (tempDesc === 'Subscription') {
       parameter = {
         topic: 'subscription',
         title: 'New Subscription',
