@@ -148,6 +148,20 @@ export default {
       type: 'percentage',
       amount: 3
     }
+  }, {
+    title: 'Google Pay',
+    description: '0000-0000-0000-0000',
+    fees: '3% Fee',
+    logo: require('assets/gpay.png'),
+    color: Color.primary,
+    code: 'GOOGLEPAY',
+    type: 'ewallet',
+    country: 'International',
+    currency: 'USD',
+    feeConfiguration: {
+      type: 'percentage',
+      amount: 3
+    }
   }],
   checkStatus(user){
     if(user == null){

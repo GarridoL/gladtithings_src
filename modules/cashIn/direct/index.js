@@ -136,6 +136,16 @@ class Stack extends Component {
             }
           })
           break
+        case 'GOOGLEPAY':
+          this.props.navigation.navigate('googlePayStack', {
+            data: {
+              amount: this.state.amount,
+              currency: cur,
+              charge: this.state.charge,
+              total: this.state.total
+            }
+          })
+          break
       }
     }
   }
