@@ -128,7 +128,7 @@ class Slider2 extends Component {
       >
         <NotificationsHandler notificationHandler={ref => (this.notificationHandler = ref)} />
         <View style={{
-          marginTop: Platform.OS == 'ios' ? 50 : 0,
+          marginTop: Platform.OS == 'ios' ? 50 : 10,
         }}>
           <View style={{
             flexDirection: 'row',
