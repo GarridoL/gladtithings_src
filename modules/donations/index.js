@@ -93,8 +93,7 @@ class Donations extends Component {
             )
           }
           <View style={{
-            paddingLeft: 20,
-            paddingRight: 20,
+            padding: 20,
             minHeight: height + (height * 0.5)
           }}>
             {!isLoading && data.length === 0 && <Text>You have no transactions yet.</Text>}
