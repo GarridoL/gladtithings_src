@@ -44,7 +44,7 @@ class Transactions extends Component {
       }, {
         column: 'account_id',
         value: user.id,
-        clause: 'or'
+        clause: '='
       }],
       sort: { created_at: 'desc' },
       limit: this.state.limit,

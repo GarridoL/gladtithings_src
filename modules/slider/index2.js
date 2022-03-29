@@ -128,7 +128,7 @@ class Slider2 extends Component {
       >
         <NotificationsHandler notificationHandler={ref => (this.notificationHandler = ref)} />
         <View style={{
-          marginTop: Platform.OS == 'ios' ? 50 : 0,
+          marginTop: Platform.OS == 'ios' ? 50 : 10,
         }}>
           <View style={{
             flexDirection: 'row',
@@ -205,14 +205,14 @@ class Slider2 extends Component {
           </View>
         </View>
         <View style={[styles.navSectionStyle, {
-          borderBottomWidth: 0,
           width: width,
           padding: 20,
           display: 'flex',
-          marginTop: 50
+          justifyContent: 'space-between',
+          height: height - 200
         }]}>
           <View style={{
-            marginBottom: 50
+            marginTop: height/5
           }}>
             {language.DrawerMenu.length > 0 &&
               language.DrawerMenu.map((item, index) => {
