@@ -50,47 +50,49 @@ class Deposit extends Component {
     const { cycle, radioSelected } = this.state;
     const { theme } = this.props.state;
     return (
-      <View style={{flexWrap: 'wrap', flex: 1}}>
-      {Helper.cycles.map((val) => {
-        return (
-          <TouchableOpacity
-            style={{ flexDirection: 'row', alignContent: 'center', alignItems: 'center', 
-            justifyContent: 'center', }}
-            key={val.value} onPress={() => {
-              this.setState({
-                cycle: val.value
-              })
-            }}>
-            <View style={{
-              height: 24,
-              width: 24,
-              borderRadius: 12,
-              borderWidth: 2,
-              borderColor: theme ? theme.primary : Color.primary,
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderWidth: 1,
-              marginTop: '5%',
-            }}>
-              {
-                val.value == (cycle != null ? cycle : radioSelected) ?
-                  <View style={{
-                    height: 12,
-                    width: 12,
-                    borderRadius: 6,
-                    backgroundColor: theme ? theme.primary : Color.primary
-                  }} />
-                  : null
-              }
-            </View>
-            <Text style={{
-              // flexDirection: 'column',
-              marginTop: '5%', marginLeft: '5%'
-            }}>{val.title}</Text>
-          </TouchableOpacity>
-        )
-      })}
-    </View>
+      <View style={{ flexWrap: 'wrap', flex: 1 }}>
+        {Helper.cycles.map((val) => {
+          return (
+            <TouchableOpacity
+              style={{
+                flexDirection: 'row', alignContent: 'center', alignItems: 'center',
+                justifyContent: 'center',
+              }}
+              key={val.value} onPress={() => {
+                this.setState({
+                  cycle: val.value
+                })
+              }}>
+              <View style={{
+                height: 24,
+                width: 24,
+                borderRadius: 12,
+                borderWidth: 2,
+                borderColor: theme ? theme.primary : Color.primary,
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderWidth: 1,
+                marginTop: '5%',
+              }}>
+                {
+                  val.value == (cycle != null ? cycle : radioSelected) ?
+                    <View style={{
+                      height: 12,
+                      width: 12,
+                      borderRadius: 6,
+                      backgroundColor: theme ? theme.primary : Color.primary
+                    }} />
+                    : null
+                }
+              </View>
+              <Text style={{
+                // flexDirection: 'column',
+                marginTop: '5%', marginLeft: '5%'
+              }}>{val.title}</Text>
+            </TouchableOpacity>
+          )
+        })}
+      </View>
     );
   }
 
@@ -154,10 +156,13 @@ class Deposit extends Component {
 
   createPayment = () => {
     let cur = this.props.state.ledger?.currency || this.state.currency;
-    if (this.state.amount !== null && this.state.amount > 0 && this.state.cycle !== null) {
-      this.retrieveLedger(cur)
+    const { params } = this.props.navigation.state;
+    if (this.state.amount === null || this.state.amount === 0) {
+      Alert.alert('Payment Error', 'You are missing your amount.');
+    } else if (this.state.cycle === null && params?.type === 'Subscription Donation') {
+      Alert.alert('Payment Error', 'You are missing your plan.');
     } else {
-      Alert.alert('Payment Error', 'You are missing your amount and plese choose your plan.');
+      this.retrieveLedger(cur)
     }
   };
 
@@ -167,7 +172,7 @@ class Deposit extends Component {
     let tempDetails = null;
     let tempDesc = null;
     if (this.state.subscribeId !== null) {
-      tempDetails = JSON.stringify({name: 'subscription', from: user.id, to: params.data.account_id}) //this.state.subscribeId
+      tempDetails = JSON.stringify({ name: 'subscription', from: user.id, to: params.data.account_id }) //this.state.subscribeId
       tempDesc = 'Subscription'
       this.sendDirectTransfer(params.data, tempDetails, tempDesc)
     } else {
@@ -248,7 +253,7 @@ class Deposit extends Component {
       if (response.data) {
         this.props.navigation.navigate('pageMessageStack', { payload: 'success', title: 'Success', data: tempDetails });
       } else {
-        this.props.navigation.navigate('pageMessageStack', { payload: 'error', title: 'Error', data: tempDetails  });
+        this.props.navigation.navigate('pageMessageStack', { payload: 'error', title: 'Error', data: tempDetails });
       }
     },
       (error) => {
@@ -335,6 +340,8 @@ class Deposit extends Component {
     const { theme, language, user } = this.props.state;
     const { amount, isLoading } = this.state;
     const { data } = this.props.navigation?.state?.params;
+    const { params } = this.props.navigation?.state
+    console.log(params?.type, '-----')
     return (
       <View
         style={{
@@ -346,11 +353,11 @@ class Deposit extends Component {
             style={{
               minHeight: height + height * 0.5,
             }}>
-            {(this.props.navigation?.state?.params?.type ===
+            {(params?.type ===
               'Subscription Donation' ||
-              this.props.navigation?.state?.params?.type ===
+              params?.type ===
               'Edit Subscription Donation' ||
-              this.props.navigation?.state?.params?.type ===
+              params?.type ===
               'Send Tithings') && (
                 <View
                   style={{
@@ -386,7 +393,7 @@ class Deposit extends Component {
                 </View>
               )}
 
-            {this.props.navigation?.state?.params?.type ===
+            {params?.type ===
               'Send Event Tithings' && (
                 <CustomizedHeader
                   data={{
@@ -416,8 +423,8 @@ class Deposit extends Component {
                   alignItems: 'center',
                 }}>
                 {
-                  (this.props.navigation?.state?.params?.type === 'Edit Subscription Donation') ?
-                    <View style={{alignItems: 'center'}}>
+                  (params?.type === 'Edit Subscription Donation') ?
+                    <View style={{ alignItems: 'center' }}>
                       <Text style={{
                         fontFamily: 'Poppins-SemiBold'
                       }}>Current Amount: {data?.currency} {data?.amount}</Text>
@@ -451,10 +458,11 @@ class Deposit extends Component {
                     />}
               </View>
             </View>
-            <View style={{ width: '100%', alignItems: 'center' }}>
-              <Text style={{fontWeight: 'bold', alignItems: 'center', alignContent: 'center', marginTop: 5}}>Choose your Plan</Text>
-              {this.cycle()}
-            </View>
+            {params?.type ===
+              'Subscription Donation' && <View style={{ width: '100%', alignItems: 'center' }}>
+                <Text style={{ fontWeight: 'bold', alignItems: 'center', alignContent: 'center', marginTop: 5 }}>Choose your Plan</Text>
+                {this.cycle()}
+              </View>}
           </View>
         </ScrollView>
         <View
