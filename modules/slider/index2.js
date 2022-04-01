@@ -212,7 +212,7 @@ class Slider2 extends Component {
           height: height - 100
         }]}>
           <View style={{
-            marginTop: 50
+            marginTop: 100
           }}>
             {language.DrawerMenu.length > 0 &&
               language.DrawerMenu.map((item, index) => {
