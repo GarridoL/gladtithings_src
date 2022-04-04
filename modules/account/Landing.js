@@ -82,6 +82,11 @@ class Landing extends Component {
             this.retrieveUserData(userInfo.data[0].id)
           } else {
             login(null, null)
+            this.setState({
+              isLoading: false
+            })
+            const{ logout } = this.props;
+            logout()
           }
         }, error => {
           console.log(error, 'login-account retrieve');
@@ -283,6 +288,7 @@ const mapDispatchToProps = dispatch => {
   const { actions } = require('@redux');
   return {
     login: (user, token) => dispatch(actions.login(user, token)),
+    logout: () => dispatch(actions.logout()),
     setTheme: (theme) => dispatch(actions.setTheme(theme)),
     setLayer: (layer) => dispatch(actions.setLayer(layer)),
     setDeepLinkRoute: (deepLinkRoute) => dispatch(actions.setDeepLinkRoute(deepLinkRoute)),
