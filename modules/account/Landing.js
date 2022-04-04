@@ -9,6 +9,9 @@ import Button from '../generic/Button.js'
 import { Spinner } from 'components';
 import Api from 'services/api/index.js';
 import { Routes } from 'common';
+import { fcmService } from 'services/broadcasting/FCMService';
+import { localNotificationService } from 'services/broadcasting/LocalNotificationService';
+import NotificationsHandler from 'services/NotificationHandler';
 
 const width = Math.round(Dimensions.get('window').width);
 const height = Math.round(Dimensions.get('window').height);
@@ -95,11 +98,41 @@ class Landing extends Component {
       this.setState({ isLoading: false });
       const { setLayer } = this.props;
       setLayer(0)
-      this.redirect('drawerStack')
+      this.firebaseNotification()
     }else{
       this.setState({ isLoading: false });
     }
   }
+
+  onRegister = () => {
+    this.notificationHandler.onRegister();
+  };
+
+  onOpenNotification = (notify) => {
+    this.notificationHandler.onOpenNotification(notify);
+  };
+
+  onNotification = (notify) => {
+    this.notificationHandler.onNotification(notify);
+  };
+
+  firebaseNotification(){
+    const { user } = this.props.state;
+    if(user == null){
+      return
+    }
+    fcmService.registerAppWithFCM()
+    fcmService.register(this.onRegister, this.onNotification, this.onOpenNotification)
+    localNotificationService.configure(this.onOpenNotification, Helper.APP_NAME)
+    this.notificationHandler.setTopics()
+    this.redirect('drawerStack')
+    return () => {
+      console.log("[App] unRegister")
+      fcmService.unRegister()
+      localNotificationService.unRegister()
+    }
+  }
+  
   redirect = (route) => {
     this.props.navigation.navigate(route);
   }
@@ -212,6 +245,7 @@ class Landing extends Component {
             flex: 1,
             alignItems: 'center',
           }}>
+            <NotificationsHandler notificationHandler={ref => (this.notificationHandler = ref)} />
             <View style={{
               height: '40%',
               width: '100%',
