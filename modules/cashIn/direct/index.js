@@ -26,7 +26,7 @@ class Stack extends Component {
     this.state = {
       isLoading: false,
       amount: null,
-      currency: 'PHP',
+      currency: 'USD',
       selected: [],
       charge: null,
       total: null
@@ -34,7 +34,7 @@ class Stack extends Component {
   }
 
   componentDidMount = () => {
-    this.setState({ currency: this.props.state.ledger?.currency || 'PHP' })
+    this.setState({ currency: this.props.state.ledger?.currency || 'USD' })
   }
 
   managePayment = (item) => {
@@ -128,6 +128,16 @@ class Stack extends Component {
           break
         case 'STRIPE':
           this.props.navigation.navigate('stripeStack', {
+            data: {
+              amount: this.state.amount,
+              currency: cur,
+              charge: this.state.charge,
+              total: this.state.total
+            }
+          })
+          break
+        case 'GOOGLEPAY':
+          this.props.navigation.navigate('googlePayStack', {
             data: {
               amount: this.state.amount,
               currency: cur,

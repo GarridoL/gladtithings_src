@@ -57,7 +57,14 @@ class Churches extends Component {
     const { region } = this.state;
     let parameter = {
       sort: { created_at: 'asc' },
+      condition: [{
+        value: user.id,
+        column: 'account_id',
+        clause: '!='
+      }],
       masses: {
+        // latitude: 10.3241515,
+        // longitude: 123.9099824
         latitude: region.latitude,
         longitude: region.longitude
       }

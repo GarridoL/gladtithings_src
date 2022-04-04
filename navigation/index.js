@@ -40,6 +40,7 @@ import MethodsStack from 'src/modules/paymentMethods/Drawer';
 import LedgerStack from 'src/modules/ledger/Drawer.js';
 import CurrencyStack from 'src/modules/currency/CurrencyDrawer.js';
 import StripeStack from 'components/Payments/Stripe/Drawer';
+import GooglePayStack from 'components/Payments/GooglePay/Drawer';
 import OtherTransactionStack from 'src/modules/deposit/Drawer';
 import DashboardStack from 'src/modules/dashboard/Drawer';
 import PaymentCardsStack from 'components/Payments/Cards/Drawer';
@@ -139,6 +140,7 @@ const PrimaryNav = createStackNavigator(
     ledgerStack: { screen: LedgerStack},
     currencyStack: { screen: CurrencyStack },
     stripeStack: { screen: StripeStack },
+    googlePayStack: { screen: GooglePayStack },
     otherTransactionStack: { screen : OtherTransactionStack },
     dashboardStack : { screen : DashboardStack },
     paymentCardsStack: { screen: PaymentCardsStack},

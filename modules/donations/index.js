@@ -37,13 +37,14 @@ class Donations extends Component {
       }, {
         column: 'account_id',
         value: user.id,
-        clause: 'or'
+        clause: '='
       }],
       sort: {created_at: 'desc'},
       limit: this.state.limit,
       offset: flag == true && this.state.offset > 0 ? (this.state.offset * this.state.limit) : this.state.offset
     }
     this.setState({ isLoading: true })
+    console.log(Routes.transactionHistoryRetrieve, parameter);
     Api.request(Routes.transactionHistoryRetrieve, parameter, response => {
       this.setState({ isLoading: false })
       if (response.data.length > 0) {
@@ -93,8 +94,7 @@ class Donations extends Component {
             )
           }
           <View style={{
-            paddingLeft: 20,
-            paddingRight: 20,
+            padding: 20,
             minHeight: height + (height * 0.5)
           }}>
             {!isLoading && data.length === 0 && <Text>You have no transactions yet.</Text>}

@@ -134,37 +134,6 @@ class Subscriptions extends Component {
                   this.props.navigation.navigate('churchesStack')
                 }}
               />
-              <View style={{
-                paddingTop: 10,
-                paddingRight: 10,
-                paddingLeft: 10,
-                alignItems: 'center'
-              }}>
-                <Button
-                  style={{
-                    width: '60%',
-                    height: 50,
-                    backgroundColor: theme ? theme.secondary : Color.secondary,
-                    marginTop: 5
-                  }}
-                  content={
-                    <View style={{
-                      flex: 1,
-                      flexDirection: 'row',
-                      alignItems: 'center'
-                    }}>
-                      <Text style={{
-                        color: 'white',
-                        fontSize: 12,
-                        fontWeight: 'bold'
-                      }}>{language.subscription.seeBillings}</Text>
-                    </View>
-                  }
-                  redirect={() => {
-                    this.props.navigation.navigate('transactionsStack', { title: 'Subscription Billings', data: dataNoLimit })
-                  }}
-                />
-              </View>
               {
                 (payment) && (
                   <View style={{ marginBottom: 100 }}>
@@ -253,36 +222,6 @@ class Subscriptions extends Component {
                 paddingLeft: 10,
                 alignItems: 'center'
               }}>
-                <Button
-                  style={{
-                    width: '60%',
-                    height: 50,
-                    backgroundColor: theme ? theme.secondary : Color.secondary,
-                    marginTop: 5
-                  }}
-                  content={
-                    <View style={{
-                      flex: 1,
-                      flexDirection: 'row',
-                      alignItems: 'center'
-                    }}>
-                      <Text style={{
-                        color: 'white',
-                        fontSize: 12
-                      }}>{language.subscription.seeBillings}</Text>
-                    </View>
-                  }
-                  redirect={() => {
-                    dataLimit.length === 0 ?
-                      Alert.alert(language.subscription.message, language.subscription.noBillings, [
-                        {
-                          text: 'OK',
-                          onPress: () => console.log('Cancel Pressed'),
-                        },
-                      ]) :
-                      this.props.navigation.navigate('transactionsStack', { title: 'Subscription Billings', data: dataLimit })
-                  }}
-                />
                 <View style={{
                   paddingLeft: 10,
                   paddingRight: 10,

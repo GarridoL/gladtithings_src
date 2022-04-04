@@ -11,6 +11,7 @@ import _ from 'lodash';
 import Comments from 'src/components/Comments/index';
 import { Spinner } from 'components';
 import Skeleton from '../../components/Loading/Skeleton';
+import { WebView } from 'react-native-webview';
 
 const width = Math.round(Dimensions.get('window').width)
 const height = Math.round(Dimensions.get('window').height)
@@ -186,22 +187,18 @@ class Community extends Component {
 
   popetwitter = () => {
     return (
-      <View style={{
-        marginBottom: 100
-      }}>
-        {dataPope.length > 0 && dataPope.map((item, index) => (
-          <Format
-            navigation={this.props.navigation}
-            loader={this.loader}
-            data={{
-              user: item.account,
-              message: item.text,
-              date: item.created_at_human,
-              id: item.id
-            }}
-          />
-        ))}
-      </View>
+      <WebView
+        source={{
+          uri: 'https://twitter.com/pontifex'
+        }}
+        style={{
+          height: 10000,
+        }}
+        startInLoadingState={true}
+        javaScriptEnabled={true}
+        thirdPartyCookiesEnabled={true}
+      // onShouldStartLoadWithRequest={this.handleChange}
+      />
     )
   }
 
@@ -223,7 +220,7 @@ class Community extends Component {
           >Communities You Might Interested In</Text>
         </View>
         {isSuggestionLoading && (
-          <Loading template={'block'} size={1}/>
+          <Loading template={'block'} size={1} />
         )}
         {community.length > 0 && community.map((item, index) => (
           <Card
@@ -244,7 +241,7 @@ class Community extends Component {
           >Communities You Manage</Text>
         </View>
         {isJoinedLoading && (
-          <Loading template={'block'} size={1}/>
+          <Loading template={'block'} size={1} />
         )}
         {community.length > 0 && community.map((item, index) => (
           <Card
@@ -273,7 +270,7 @@ class Community extends Component {
         </View>
 
         {isManagedLoading && (
-          <Loading template={'block'} size={1}/>
+          <Loading template={'block'} size={1} />
         )}
         {community.length > 0 && community.map((item, index) => (
           <Card
@@ -303,9 +300,9 @@ class Community extends Component {
             }
             if (Math.round(scrollingHeight) >= Math.round(totalHeight)) {
               console.log(Math.round(scrollingHeight), Math.round(totalHeight), this.commentRef)
-              this.setState({shouldRetrieve: true})
-            } else [
-              this.setState({shouldRetrieve: false})
+              this.setState({ shouldRetrieve: true })
+            } else[
+              this.setState({ shouldRetrieve: false })
             ]
           }}>
           {/* <TouchableOpacity
@@ -363,12 +360,12 @@ class Community extends Component {
             <View style={{
               marginBottom: height / 2
             }}>
-              <Comments withImages={true} shouldRetrieve={shouldRetrieve} navigation={this.props.navigation}/>
+              <Comments withImages={true} shouldRetrieve={shouldRetrieve} navigation={this.props.navigation} />
             </View>
           }
           {
             (this.state.default && this.isLoading) && (
-              <Skeleton template={'request'}/>
+              <Skeleton template={'request'} />
             )
           }
           {this.state.message && this.popetwitter()}

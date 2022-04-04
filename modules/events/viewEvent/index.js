@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCalendarAlt, faMapMarkerAlt, faSearch } from '@fortawesome/free-solid-svg-icons';
 import Style from './Style';
 import Skeleton from 'components/Loading/Skeleton';
+import { Spinner } from 'components';
 
 const width = Math.round(Dimensions.get('window').width)
 const height = Math.round(Dimensions.get('window').height)
@@ -25,14 +26,14 @@ class ViewEvent extends Component {
       event: [],
       limit: 8,
       offset: 0,
-      currency: 'PHP',
+      currency: 'USD',
       loadingEvent: false
     }
   }
 
   componentDidMount() {
     this.retrieveEvents()
-    this.setState({ currency: this.props.state.ledger?.currency || 'PHP' })
+    this.setState({ currency: this.props.state.ledger?.currency || 'USD' })
   }
 
   attendEvent = (item) => {
@@ -54,15 +55,19 @@ class ViewEvent extends Component {
     console.log(Routes.eventAttendeesCreate, {
       event_id: event.id,
       account_id: this.props.state.user.id,
-      event_name: event.name
+      event_name: event.name,
+      username: this.props.state.user.username,
+      to: event.account_id
     });
     Api.request(Routes.eventAttendeesCreate, {
       event_id: event.id,
       account_id: this.props.state.user.id,
-      event_name: event.name
+      event_name: event.name,
+      username: this.props.state.user.username,
+      to: event.account_id
     }, response => {
       this.setState({ loadingEvent: false })
-      if (response.data > 0) {
+      if(response.data) {
         Alert.alert('Success', `You successfully attended to "${event.name}" event.`);
       } else {
         Alert.alert('Error', response.error);
@@ -205,10 +210,11 @@ class ViewEvent extends Component {
     )
   }
   render() {
-    const { donate, event, isLoading } = this.state;
+    const { donate, event, isLoading, loadingEvent } = this.state;
     const { language } = this.props.state;
     return (
       <View style={{ backgroundColor: Color.containerBackground }}>
+        {loadingEvent ? <Spinner mode="overlay" /> : null}
         <ScrollView showsVerticalScrollIndicator={false}>
           <View>
             {this.versionTwo(event)}
@@ -244,7 +250,7 @@ class ViewEvent extends Component {
                 width: '40%'
               }}
                 onClick={() => {
-                  this.props.navigation.navigate('otherTransactionStack', { type: 'Send Tithings', data: event })
+                  this.props.navigation.navigate('otherTransactionStack', { type: 'Send Event Tithings', data: event })
                 }}
                 title={language.Donation}
               />

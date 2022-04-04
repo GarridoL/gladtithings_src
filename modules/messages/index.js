@@ -54,9 +54,9 @@ class Transactions extends Component {
                 fontFamily: 'Poppins-SemiBold'
               }}
               onClick={() => {
-                this.props.navigation.navigate('Dashboard')
+                params.data === 'subscription' ? this.props.navigation.navigate('subscriptionStack') : this.props.navigation.navigate('Dashboard')
               }}
-              title={'Go to Dashboard'}
+              title={params.data === 'subscription' ? 'Go to Subscriptions' :'Go to Dashboard'}
             />
           </View>
         </ScrollView>

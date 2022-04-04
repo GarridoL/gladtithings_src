@@ -128,7 +128,7 @@ class Slider2 extends Component {
       >
         <NotificationsHandler notificationHandler={ref => (this.notificationHandler = ref)} />
         <View style={{
-          marginTop: Platform.OS == 'ios' ? 50 : 0,
+          marginTop: Platform.OS == 'ios' ? 50 : 10,
         }}>
           <View style={{
             flexDirection: 'row',
@@ -156,63 +156,63 @@ class Slider2 extends Component {
               width: '50%',
               paddingRight: 20
             }}>
-            {
-              user !== null ? (
-                <View
-                  style={{
-                    flex: 1,
-                    flexDirection: 'row',
-                    justifyContent: 'flex-end',
-                    alignItems: 'center'
-                  }}>
-                  <TouchableOpacity onPress={() => this.props.navigation.navigate('profileStack')}>
-                    {user?.account_profile?.url ? <Image
-                      source={{ uri: Config.BACKEND_URL + user?.account_profile.url }}
-                      style={[BasicStyles.profileImageSize, {
-                        height: 50,
-                        width: 50,
-                        borderRadius: 50,
-                        borderWidth: 2,
-                        borderColor: Color.warning
-                      }]} /> :
-                      <FontAwesomeIcon
-                        icon={faUserCircle}
-                        size={50}
-                        style={{
-                          color: Color.white
-                        }}
-                      />
-                    }
-                  </TouchableOpacity>
-                  <Text numberOfLines={1} style={{
-                    color: Color.white,
-                    fontFamily: 'Poppins-SemiBold',
-                    fontSize: 16,
-                    paddingLeft: 10
-                  }}>
-                    {user?.account_information?.first_name ? user?.account_information.first_name + ' ' + user?.account_information.last_name : user?.username}
+              {
+                user !== null ? (
+                  <View
+                    style={{
+                      flex: 1,
+                      flexDirection: 'row',
+                      justifyContent: 'flex-end',
+                      alignItems: 'center'
+                    }}>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('profileStack')}>
+                      {user?.account_profile?.url ? <Image
+                        source={{ uri: Config.BACKEND_URL + user?.account_profile.url }}
+                        style={[BasicStyles.profileImageSize, {
+                          height: 50,
+                          width: 50,
+                          borderRadius: 50,
+                          borderWidth: 2,
+                          borderColor: Color.warning
+                        }]} /> :
+                        <FontAwesomeIcon
+                          icon={faUserCircle}
+                          size={50}
+                          style={{
+                            color: Color.white
+                          }}
+                        />
+                      }
+                    </TouchableOpacity>
+                    <Text numberOfLines={1} style={{
+                      color: Color.white,
+                      fontFamily: 'Poppins-SemiBold',
+                      fontSize: 16,
+                      paddingLeft: 10
+                    }}>
+                      {user?.account_information?.first_name ? user?.account_information.first_name + ' ' + user?.account_information.last_name : user?.username}
+                    </Text>
+                  </View>
+                ) : (
+                  <Text style={[styles.sectionHeadingStyle, {
+                    backgroundColor: theme ? theme.primary : Color.primary
+                  }]}>
+                    Welcome to {Helper.company}!
                   </Text>
-                </View>
-              ) : (
-                <Text style={[styles.sectionHeadingStyle, {
-                  backgroundColor: theme ? theme.primary : Color.primary
-                }]}>
-                  Welcome to {Helper.company}!
-                </Text>
-              )
-            }
+                )
+              }
             </View>
           </View>
         </View>
         <View style={[styles.navSectionStyle, {
-          borderBottomWidth: 0,
           width: width,
           padding: 20,
           display: 'flex',
-          marginTop: 50
+          justifyContent: 'space-between',
+          height: height - 100
         }]}>
           <View style={{
-            marginBottom: 50
+            marginTop: 100
           }}>
             {language.DrawerMenu.length > 0 &&
               language.DrawerMenu.map((item, index) => {

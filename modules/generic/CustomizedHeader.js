@@ -28,7 +28,7 @@ class CustomizedHeader extends Component {
           padding: 10,
           fontSize: 13
         }}>
-          {language.subscription.hi}, {user.account_information.first_name + ' ' + user.account_information.last_name}. {language.subscription.greet} {text}.
+          {language.subscription.hi}, {user.account_information.first_name + ' ' + user.account_information.last_name}. {language.subscription.greet} {text}
         </Text>
         <Button
           style={{
@@ -66,8 +66,7 @@ class CustomizedHeader extends Component {
         justifyContent: 'center',
         alignItems: 'center',
         width: width,
-        flexDirection: 'row',
-        marginTop: 10,
+        flexDirection: 'row'
       }}>
         <View style={{
           width: '50%',
@@ -342,7 +341,8 @@ class CustomizedHeader extends Component {
         width: width,
         paddingLeft: 15,
         paddingRight: 15,
-        marginBottom: this.props.version != 3 ? 0 : 15
+        marginBottom: this.props.version != 3 ? 0 : 15,
+        justifyContent: 'center'
       }}>
         {this.props.version === 1 && this.versionOne()}
         {this.props.version === 2 && this.versionTwo()}

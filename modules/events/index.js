@@ -25,14 +25,79 @@ class Events extends Component {
       events: [],
       limit: 8,
       offset: 0,
-      currency: 'PHP',
-      loadingEvent: false
+      currency: 'USD',
+      loadingEvent: false,
+      randomEvent: null
     }
   }
 
   componentDidMount() {
+    this.retrieveRandomEvent()
     this.retrieveEvents(false)
-    this.setState({ currency: this.props.state.ledger?.currency || 'PHP' })
+    this.setState({ currency: this.props.state.ledger?.currency || 'USD' })
+  }
+
+  retrieveLedger = (currency) => {
+    const { user } = this.props.state;
+    const { amount } = this.state;
+    let parameter = {
+      condition: [
+        {
+          clause: '=',
+          column: 'account_id',
+          value: user.id
+        }
+      ],
+      account_code: user.code,
+      account_id: user.id
+    }
+    console.log(Routes.ledgerSummary, parameter);
+    this.setState({ isLoading: true })
+    Api.request(Routes.ledgerSummary, parameter, response => {
+      this.setState({ isLoading: false })
+      if (response.data.length > 0) {
+        let ledger = response.data.filter(item => item.currency == currency);
+        console.log(ledger, currency)
+        if (ledger.length > 0) {
+          this.setState({ ledger: ledger[0] })
+          if (parseFloat(ledger[0].available_balance) >= parseFloat(amount)) {
+            this.createLedger()
+          } else {
+            Alert.alert('Payment Error', 'Cash in more to donate this kind of amount.');
+          }
+        } else {
+          Alert.alert('Payment Error', 'You have no balance for this currency.');
+        }
+      }
+    }, error => {
+      console.log(error);
+      this.setState({ isLoading: false })
+    });
+  }
+
+  retrieveRandomEvent = () => {
+    const { user } = this.props.state;
+    let parameter = {
+      account_id: user.id
+    }
+    this.setState({ isLoading: true })
+    Api.request(Routes.eventRandom, parameter, response => {
+      this.setState({ isLoading: false })
+      if (response.data != null) {
+        let event = response.data
+        console.log(response.data)
+        let random = {
+          logo: event.image?.length > 0 ? event.image[0].category : null,
+          address: event.location,
+          date: '<date>',
+          name: event.name
+        }
+        this.setState({ randomEvent: random })
+      }
+    }, error => {
+      console.log(error)
+      this.setState({ isLoading: false })
+    })
   }
 
   retrieveEvents = (flag) => {
@@ -74,8 +139,9 @@ class Events extends Component {
   }
 
   createPayment = async () => {
-    if (this.state.amount !== null && this.state.amount > 0) {
-      this.createLedger();
+    const { amount, currency } = this.state;
+    if (amount !== null && amount > 0) {
+      this.retrieveLedger(currency);
     } else {
       Alert.alert('Donation Error', 'You are missing your amount.');
     }
@@ -105,10 +171,13 @@ class Events extends Component {
   };
 
   render() {
-    const { theme, user, paypalUrl } = this.props.state;
-    const { donate, amount, events, isLoading, loadingEvent } = this.state;
+    const { theme, user } = this.props.state;
+    const { donate, events, isLoading, loadingEvent, randomEvent } = this.state;
     return (
-      <View style={{ backgroundColor: Color.containerBackground }}>
+      <View style={{
+        height: height,
+        backgroundColor: Color.containerBackground
+      }}>
         <ScrollView showsVerticalScrollIndicator={false}
           onScroll={(event) => {
             let scrollingHeight = event.nativeEvent.layoutMeasurement.height + event.nativeEvent.contentOffset.y
@@ -127,7 +196,7 @@ class Events extends Component {
           style={{
             backgroundColor: Color.containerBackground
           }}>
-          <View style={{ marginBottom: height /2, }}>
+          <View style={{ marginBottom: height / 2, }}>
             <CustomizedHeader
               version={2}
               donate={true}
@@ -135,12 +204,13 @@ class Events extends Component {
                 this.setState({ donate: true })
               }}
               data={
-                events.length > 0 ?
+                randomEvent !== null ?
                   {
                     merchant_details: {
-                      name: events[0].name,
-                      logo: events[0].logo,
-                      address: events[0].address
+                      name: randomEvent.name,
+                      logo: randomEvent.logo,
+                      date: randomEvent.date,
+                      address: randomEvent.address
                     },
                     amount: 0
                   }
@@ -163,8 +233,8 @@ class Events extends Component {
                 data={events}
                 buttonColor={theme ? theme.secondary : Color.secondary}
                 buttonTitle={'Donate'}
-                redirect={(item) => { this.props.navigation.navigate('viewEventStack', {data : item}) }}
-                buttonClick={(item) => { this.props.navigation.navigate('otherTransactionStack', { type: 'Send Event Tithings', data: item}) }}
+                redirect={(item) => { this.props.navigation.navigate('viewEventStack', { data: item }) }}
+                buttonClick={(item) => { this.props.navigation.navigate('otherTransactionStack', { type: 'Send Event Tithings', data: item }) }}
               />
               {!isLoading && events.length == 0 &&
                 <View style={{
@@ -190,30 +260,18 @@ class Events extends Component {
               <View style={{
                 padding: 20,
               }}>
-                <View style={{
-                  padding: 20,
-                }}>
-                  <View style={{
-                    borderWidth: 1,
-                    borderColor: Color.lightGray,
-                    padding: 15,
-                    borderRadius: 10
-                  }}>
-                    <AmountInput
-                      onChange={(amount, currency) => this.setState({
-                        amount: amount,
-                        currency: currency
-                      })
-                      }
-                      maximum={(user && Helper.checkStatus(user) >= Helper.accountVerified) ? Helper.MAX_VERIFIED : Helper.MAX_NOT_VERIFIED}
-                      type={{
-                        type: 'Cash In'
-                      }}
-                      disableRedirect={false}
-                      navigation={this.props.navigation}
-                    />
-                  </View>
-                </View>
+                <AmountInput
+                  onChange={(amount, currency) => this.setState({
+                    amount: amount
+                  })
+                  }
+                  maximum={(user && Helper.checkStatus(user) >= Helper.accountVerified) ? Helper.MAX_VERIFIED : Helper.MAX_NOT_VERIFIED}
+                  type={{
+                    type: 'Cash In'
+                  }}
+                  disableRedirect={false}
+                  navigation={this.props.navigation}
+                />
               </View>
             }
           </View>

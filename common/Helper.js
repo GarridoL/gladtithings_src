@@ -105,50 +105,67 @@ export default {
     }
   },
   defaultLanguage: English,
-  cashInMethods: [{
-    title: 'VISA DIRECT',
-    description: 'Accepts Credit / Debit Card',
-    fees: 'Zero Fees',
-    logo: require('assets/visa.png'),
-    color: '#1A1F71',
-    code: 'VISA',
-    type: 'bank',
-    currency: 'USD',
-    country: 'International',
-    feeConfiguration: {
-      type: 'percentage',
-      amount: 2
-    }
-  },
+  cashInMethods: [
+  //   {
+  //   title: 'VISA DIRECT',
+  //   description: 'Accepts Credit / Debit Card',
+  //   fees: 'Zero Fees',
+  //   logo: require('assets/visa.png'),
+  //   color: '#1A1F71',
+  //   code: 'VISA',
+  //   type: 'bank',
+  //   currency: 'USD',
+  //   country: 'International',
+  //   feeConfiguration: {
+  //     type: 'percentage',
+  //     amount: 2
+  //   }
+  // },
+  // {
+  //   title: 'PayPal',
+  //   description: 'PayPal Authorized',
+  //   fees: '3% Fee',
+  //   logo: require('assets/paypal.png'),
+  //   color: Color.gray,
+  //   code: 'PAYPAL',
+  //   type: 'ewallet',
+  //   country: 'International',
+  //   currency: 'USD',
+  //   feeConfiguration: {
+  //     type: 'percentage',
+  //     amount: 3
+  //   }
+  // }, {
+  //   title: 'Stripe CC / DC',
+  //   description: '0000-0000-0000-0000',
+  //   fees: '3% Fee',
+  //   logo: require('assets/stripe.png'),
+  //   color: Color.primary,
+  //   code: 'STRIPE',
+  //   type: 'bank',
+  //   country: 'International',
+  //   currency: 'USD',
+  //   feeConfiguration: {
+  //     type: 'percentage',
+  //     amount: 3
+  //   }
+  // }, 
   {
-    title: 'PayPal',
-    description: 'PayPal Authorized',
+    title: 'Google Pay',
+    description: '0000-0000-0000-0000',
     fees: '3% Fee',
-    logo: require('assets/paypal.png'),
-    color: Color.gray,
-    code: 'PAYPAL',
+    logo: require('assets/gpay.png'),
+    color: Color.primary,
+    code: 'GOOGLEPAY',
     type: 'ewallet',
     country: 'International',
     currency: 'USD',
     feeConfiguration: {
       type: 'percentage',
-      amount: 4
+      amount: 3
     }
-  }, {
-    title: 'Stripe CC / DC',
-    description: '0000-0000-0000-0000',
-    fees: '3% Fee',
-    logo: require('assets/stripe.png'),
-    color: Color.primary,
-    code: 'STRIPE',
-    type: 'bank',
-    country: 'International',
-    currency: 'USD',
-    feeConfiguration: {
-      type: 'percentage',
-      amount: 4
-    }
-  }],
+  }
+],
   checkStatus(user){
     if(user == null){
       return false
@@ -189,4 +206,17 @@ export default {
       case 'thb': return parseInt(maximum / 1.50);
     }
   },
+  cycles:[{
+    value: 'monthly',
+    title: 'Monthly'
+  }, {
+    value: 'quarterly',
+    title: 'Quarterly'
+  }, {
+    value: 'semi-annually',
+    title: 'Semi-annually'
+  }, {
+    value: 'annually',
+    title: 'Annually'
+  }]
 };

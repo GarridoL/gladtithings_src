@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, Dimensions, Alert } from 'react-native';
-import { Color, Routes, Helper } from 'common';
+import { View, Text, ScrollView, Dimensions, Alert, TouchableOpacity } from 'react-native';
+import { Color, Routes, Helper, BasicStyles } from 'common';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faChurch } from '@fortawesome/free-solid-svg-icons';
@@ -22,7 +22,9 @@ class Deposit extends Component {
       isLoading: false,
       subscribeId: null,
       currency: 'USD',
-      ledger: null
+      ledger: null,
+      cycle: null,
+      radioSelected: null
     };
   }
 
@@ -42,6 +44,56 @@ class Deposit extends Component {
         onPress: () => this.proceed(),
       },
     ]);
+  }
+
+  cycle = () => {
+    const { cycle, radioSelected } = this.state;
+    const { theme } = this.props.state;
+    return (
+      <View style={{ flexWrap: 'wrap', flex: 1 }}>
+        {Helper.cycles.map((val) => {
+          return (
+            <TouchableOpacity
+              style={{
+                flexDirection: 'row', alignContent: 'center', alignItems: 'center',
+                justifyContent: 'center',
+              }}
+              key={val.value} onPress={() => {
+                this.setState({
+                  cycle: val.value
+                })
+              }}>
+              <View style={{
+                height: 24,
+                width: 24,
+                borderRadius: 12,
+                borderWidth: 2,
+                borderColor: theme ? theme.primary : Color.primary,
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderWidth: 1,
+                marginTop: '5%',
+              }}>
+                {
+                  val.value == (cycle != null ? cycle : radioSelected) ?
+                    <View style={{
+                      height: 12,
+                      width: 12,
+                      borderRadius: 6,
+                      backgroundColor: theme ? theme.primary : Color.primary
+                    }} />
+                    : null
+                }
+              </View>
+              <Text style={{
+                // flexDirection: 'column',
+                marginTop: '5%', marginLeft: '5%'
+              }}>{val.title}</Text>
+            </TouchableOpacity>
+          )
+        })}
+      </View>
+    );
   }
 
   proceed = () => {
@@ -78,12 +130,12 @@ class Deposit extends Component {
     this.setState({ isLoading: true })
     Api.request(Routes.ledgerSummary, parameter, response => {
       this.setState({ isLoading: false })
-      if(response.data.length > 0) {
+      if (response.data.length > 0) {
         let ledger = response.data.filter(item => item.currency == currency);
         console.log(ledger, currency)
-        if(ledger.length > 0) {
-          this.setState({ledger: ledger[0]})
-          if(parseFloat(ledger[0].available_balance) >= parseFloat(amount)) {
+        if (ledger.length > 0) {
+          this.setState({ ledger: ledger[0] })
+          if (parseFloat(ledger[0].available_balance) >= parseFloat(amount)) {
             if (this.props.navigation?.state?.params?.type !== 'Subscription Donation') {
               this.createLedger();
             } else {
@@ -104,19 +156,23 @@ class Deposit extends Component {
 
   createPayment = () => {
     let cur = this.props.state.ledger?.currency || this.state.currency;
-    if (this.state.amount !== null && this.state.amount > 0) {
-      this.retrieveLedger(cur)
+    const { params } = this.props.navigation.state;
+    if (this.state.amount === null || this.state.amount === 0) {
+      Alert.alert('Payment Error', 'You are missing your amount.');
+    } else if (this.state.cycle === null && params?.type === 'Subscription Donation') {
+      Alert.alert('Payment Error', 'You are missing your plan.');
     } else {
-      Alert.alert('Payment Error', 'You are missing your amount');
+      this.retrieveLedger(cur)
     }
   };
 
   createLedger = () => {
     const { params } = this.props.navigation.state;
+    const { user } = this.props.state;
     let tempDetails = null;
     let tempDesc = null;
     if (this.state.subscribeId !== null) {
-      tempDetails = 'subscription'  //this.state.subscribeId
+      tempDetails = JSON.stringify({ name: 'subscription', from: user.id, to: params.data.account_id }) //this.state.subscribeId
       tempDesc = 'Subscription'
       this.sendDirectTransfer(params.data, tempDetails, tempDesc)
     } else {
@@ -142,6 +198,10 @@ class Deposit extends Component {
       currency: currency,
       details: data.id,
       description: tempDesc,
+      to: data.account_id,
+      topic: 'event-donation',
+      title: 'New Event Donation',
+      message: `${user.username} donated an amount of ${currency} ${this.state.amount} to your event: ${data.name}.`
     };
     Api.request(Routes.ledgerCreate, parameter, response => {
       this.setState({ isLoading: true })
@@ -168,15 +228,32 @@ class Deposit extends Component {
       amount: this.state.amount,
       details: tempDetails,
       currency: currency,
-      description: tempDesc,
+      description: tempDesc
+    }
+    if (tempDetails === 'church_donation') {
+      parameter = {
+        topic: 'church-donation',
+        title: 'New Church Donation',
+        message: `${user.username} donated an amount of ${currency} ${this.state.amount} to your church.`,
+        ...parameter,
+      }
+    }
+    if (tempDesc === 'Subscription') {
+      parameter = {
+        topic: 'subscription',
+        title: 'New Subscription',
+        message: `You have a new subscriber to your church`,
+        ...parameter,
+      }
     }
     this.setState({ isLoading: true });
+    console.log(Routes.sendDirectCreate, parameter, '-------------------------')
     Api.request(Routes.sendDirectCreate, parameter, response => {
       this.setState({ isLoading: false });
       if (response.data) {
-        this.props.navigation.navigate('pageMessageStack', { payload: 'success', title: 'Success' });
+        this.props.navigation.navigate('pageMessageStack', { payload: 'success', title: 'Success', data: tempDetails });
       } else {
-        this.props.navigation.navigate('pageMessageStack', { payload: 'error', title: 'Error' });
+        this.props.navigation.navigate('pageMessageStack', { payload: 'error', title: 'Error', data: tempDetails });
       }
     },
       (error) => {
@@ -186,60 +263,55 @@ class Deposit extends Component {
     );
   };
 
-  verifyMerchant = (merchant) => {
-    let parameter = {
+  subscribe = () => {
+    const { user } = this.props.state;
+    const { currency, cycle } = this.state;
+    const { params } = this.props.navigation.state;
+    let parameters = {
       condition: [{
-        value: merchant.id,
+        value: params.data?.id,
         clause: '=',
         column: 'id'
       }]
     };
-    console.log(parameter, Routes.merchantsRetrieve);
     this.setState({ isLoading: true })
-    Api.request(Routes.merchantsRetrieve, parameter, response => {
+    Api.request(Routes.merchantsRetrieve, parameters, responses => {
       this.setState({ isLoading: false })
-      if (response.data.length > 0) {
-        return response.data[0].addition_informations
+      if (responses.data.length > 0) {
+        if (responses.data[0].addition_informations !== 'subscription-enabled') {
+          Alert.alert('Error subscription', 'The church disabled its subscription.')
+          return
+        }
+        let parameter = {
+          account_id: user.id,
+          merchant: params.data.id,
+          amount: this.state.amount,
+          currency: currency,
+          cycle: cycle,
+          to: params.data.account_id
+        };
+        Api.request(Routes.SubscriptionCreate, parameter, response => {
+          this.setState({ isLoading: true })
+          if (response.data != null) {
+            this.setState({ subscribeId: response.data })
+            this.createLedger()
+          }
+        }, error => {
+          Alert.alert('Error', error);
+        });
       } else {
-        return null
+        Alert.alert('Error subscription' + verified, 'The church disabled its subscription.')
+        return
       }
     }, error => {
       this.setState({ isLoading: false })
       console.log(error)
-      return null
-    });
-  }
-
-  subscribe = () => {
-    const { user } = this.props.state;
-    const { currency } = this.state;
-    const { params } = this.props.navigation.state;
-    if(this.verifyMerchant(params.data) !== 'subscription-enabled') {
-      Alert.alert('Error subscription', 'The church disabled its subscription.')
-      return
-    }
-    let parameter = {
-      account_id: user.id,
-      merchant: params.data.id,
-      amount: this.state.amount,
-      currency: currency,
-      to: params.data.account_id
-    };
-    console.log(parameter, Routes.SubscriptionCreate);
-    Api.request(Routes.SubscriptionCreate, parameter, response => {
-      this.setState({ isLoading: true })
-      if (response.data != null) {
-        this.setState({ subscribeId: response.data })
-        this.createLedger()
-      }
-    }, error => {
-      Alert.alert('Error', error);
     });
   }
 
   updatePayment = () => {
     const { user } = this.props.state;
-    const { currency } = this.state;
+    const { currency, cycle } = this.state;
     const { params } = this.props.navigation.state;
     let parameter = {
       id: params.data.id,
@@ -247,7 +319,8 @@ class Deposit extends Component {
       account_id: user.id,
       merchant: params.data.merchant,
       amount: this.state.amount === 0 ? params.data.amount : this.state.amount,
-      currency: currency
+      currency: currency,
+      cycle: cycle === null ? params.cycle : cycle
     };
     this.setState({ isLoading: true })
     Api.request(Routes.SubscriptionUpdate, parameter, response => {
@@ -267,6 +340,8 @@ class Deposit extends Component {
     const { theme, language, user } = this.props.state;
     const { amount, isLoading } = this.state;
     const { data } = this.props.navigation?.state?.params;
+    const { params } = this.props.navigation?.state
+    console.log(params?.type, '-----')
     return (
       <View
         style={{
@@ -278,11 +353,11 @@ class Deposit extends Component {
             style={{
               minHeight: height + height * 0.5,
             }}>
-            {(this.props.navigation?.state?.params?.type ===
+            {(params?.type ===
               'Subscription Donation' ||
-              this.props.navigation?.state?.params?.type ===
+              params?.type ===
               'Edit Subscription Donation' ||
-              this.props.navigation?.state?.params?.type ===
+              params?.type ===
               'Send Tithings') && (
                 <View
                   style={{
@@ -291,8 +366,8 @@ class Deposit extends Component {
                     alignItems: 'center',
                     width: width,
                     backgroundColor: theme ? theme.primary : Color.primary,
-                    borderTopRightRadius: 30,
-                    borderTopLeftRadius: 30,
+                    borderBottomRightRadius: 30,
+                    borderBottomLeftRadius: 30,
                   }}>
                   <FontAwesomeIcon
                     icon={faChurch}
@@ -318,7 +393,7 @@ class Deposit extends Component {
                 </View>
               )}
 
-            {this.props.navigation?.state?.params?.type ===
+            {params?.type ===
               'Send Event Tithings' && (
                 <CustomizedHeader
                   data={{
@@ -348,11 +423,14 @@ class Deposit extends Component {
                   alignItems: 'center',
                 }}>
                 {
-                  (this.props.navigation?.state?.params?.type === 'Edit Subscription Donation') ?
-                    <View>
+                  (params?.type === 'Edit Subscription Donation') ?
+                    <View style={{ alignItems: 'center' }}>
                       <Text style={{
                         fontFamily: 'Poppins-SemiBold'
-                      }}>Current Amount: {data?.amount}</Text>
+                      }}>Current Amount: {data?.currency} {data?.amount}</Text>
+                      <Text style={{
+                        fontFamily: 'Poppins-SemiBold'
+                      }}>Current Schedule: {data?.cycle.toUpperCase()}</Text>
                       <AmountInput
                         onChange={(amount, currency) => this.setState({
                           amount: amount
@@ -380,6 +458,11 @@ class Deposit extends Component {
                     />}
               </View>
             </View>
+            {params?.type ===
+              'Subscription Donation' && <View style={{ width: '100%', alignItems: 'center' }}>
+                <Text style={{ fontWeight: 'bold', alignItems: 'center', alignContent: 'center', marginTop: 5 }}>Choose your Plan</Text>
+                {this.cycle()}
+              </View>}
           </View>
         </ScrollView>
         <View

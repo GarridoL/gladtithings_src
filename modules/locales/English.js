@@ -224,7 +224,7 @@ export default {
     proceed: 'Proceed',
     cancelSubscription: 'Cancel Subscription',
     saveChanges: 'Save Changes',
-    greet: 'how are you ?',
+    greet: 'How are you ?',
     seeBillings: 'See your billings here...',
     viewSubscriptionList: 'View Subscriptions List',
     viewPaymentMethods: 'View Payment Methods',

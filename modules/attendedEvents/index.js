@@ -25,13 +25,13 @@ class AttendedEvents extends Component {
       events: [],
       limit: 8,
       offset: 0,
-      currency: 'PHP'
+      currency: 'USD'
     }
   }
 
   componentDidMount() {
     this.retrieveEvents(false)
-    this.setState({ currency: this.props.state.ledger?.currency || 'PHP' })
+    this.setState({ currency: this.props.state.ledger?.currency || 'USD' })
   }
 
   retrieveEvents = (flag) => {

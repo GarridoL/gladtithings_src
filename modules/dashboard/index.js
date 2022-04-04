@@ -34,8 +34,10 @@ class Dashboard extends Component {
   }
 
   componentDidMount() {
-    this.retrieveBalance();
-    this.retrieveLedgerHistory()
+    this.props.navigation.addListener('didFocus', () => {
+      this.retrieveBalance();
+      this.retrieveLedgerHistory()
+    })
   }
 
   retrieveLedgerHistory = () => {
@@ -48,7 +50,7 @@ class Dashboard extends Component {
       }, {
         column: 'account_id',
         value: user.id,
-        clause: 'or'
+        clause: '='
       }],
       sort: { created_at: 'desc' },
       limit: 5,

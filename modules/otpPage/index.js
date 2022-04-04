@@ -225,8 +225,12 @@ class OTP extends Component {
       currency: data.currency,
       notes: data.notes,
       charge: data.charge,
-      payload: payload
+      payload: payload,
+      topic: 'direct-transfer',
+      title: 'Direct Transfer',
+      message: `${this.props.state.user.username} transferred an amount of ${data.currency} ${data.amount} to your wallet.`
     }
+    console.log(Routes.ledgerDirectTransfer, parameter)
     this.setState({ isLoading: true });
     Api.request(Routes.ledgerDirectTransfer, parameter, response => {
       this.setState({ isLoading: false });

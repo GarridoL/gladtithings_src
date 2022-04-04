@@ -3,6 +3,7 @@ import { Dimensions, Platform } from 'react-native';
 const width = Math.round(Dimensions.get('window').width);
 const borderRadius = 12
 export default {
+  inputBorderRadius: 25,
   buttonBorderRadius: 20,
   elevation: 0,
   formControl: {
@@ -181,6 +182,29 @@ export default {
       alignItems: 'center',
       paddingRight: 64,
       width: '90%'
+    },
+    headerTitleStyle: {
+      fontFamily: 'Poppins-SemiBold',
+    },
+  },
+  headerDrawerStylePrimary: {
+    headerStyle: {
+      elevation: 0,
+      backgroundColor: Color.primary,
+      height: 60,
+      justifyContent: 'center',
+      alignItems: 'center',
+      fontSize: 18,
+      width: width,
+      borderBottomColor: Color.primary
+    },
+    headerTitleContainerStyle: {
+      backgroundColor: Color.primary,
+      justifyContent: 'center',
+      alignItems: 'center',
+      paddingRight: 64,
+      width: '90%',
+      borderBottomColor: Color.primary
     },
     headerTitleStyle: {
       fontFamily: 'Poppins-SemiBold',

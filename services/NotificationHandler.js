@@ -128,12 +128,32 @@ class NotificationHandler extends Component {
       }
         break
       case 'subscription': {
-        console.log(data, '================from subscription------------------')
+        console.log(data)
         this.playSound()
       }
         break
       case 'attend-event': {
-        console.log(data, '================from attend event------------------')
+        console.log(data)
+        this.playSound()
+      }
+        break
+      case 'event-donation': {
+        console.log(data)
+        this.playSound()
+      }
+        break
+      case 'church-donation': {
+        console.log(data)
+        this.playSound()
+      }
+        break
+      case 'direct-transfer': {
+        console.log(data)
+        this.playSound()
+      }
+        break
+      case 'cash-in': {
+        console.log(data)
         this.playSound()
       }
         break

@@ -50,7 +50,27 @@ const Stack = createStackNavigator({
     navigationOptions: ({navigation}) => ({
       title: 'Event',
       headerLeft: <HeaderOptionsConnect navigationProps={navigation} />,
-      ...BasicStyles.headerDrawerStyle
+      ...BasicStyles.headerDrawerStylePrimary
+      // ...{
+			// 	headerStyle: {
+			// 		elevation: 0,
+			// 		backgroundColor: Color.primary,
+			// 		height: 60,
+			// 		justifyContent: 'center',
+			// 		alignItems: 'center',
+			// 		fontSize: 18
+			// 	},
+			// 	headerTitleContainerStyle: {
+			// 		backgroundColor: Color.primary,
+			// 		justifyContent: 'center',
+			// 		alignItems: 'center',
+			// 		paddingRight: 64
+			// 	},
+			// 	headerTitleStyle: {
+			// 		fontFamily: 'Poppins-SemiBold',
+			// 		color: 'white'
+			// 	},
+			// }
     }),
   },
 });

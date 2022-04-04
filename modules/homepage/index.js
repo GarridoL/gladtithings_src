@@ -53,6 +53,8 @@ class HomePage extends Component {
               ...this.state.region,
               latitude: info.coords.latitude,
               longitude: info.coords.longitude
+              // latitude: 10.3241515,
+              // longitude: 123.9099824
             }
           }, () => {
             this.retrieveChurches()
@@ -101,6 +103,10 @@ class HomePage extends Component {
         value: user.id,
         column: 'account_id',
         clause: '='
+      }, {
+        value: user.sub_account ? user.sub_account?.id : '%%',
+        column: 'merchant_id',
+        clause: '!='
       }],
       limit: 6,
       sort: {created_at: 'desc'}
@@ -136,6 +142,10 @@ class HomePage extends Component {
         value: new Date(),
         column: 'start_date',
         clause: '>'
+      }, {
+        clause: '!=',
+        column: 'account_id',
+        value: user.id
       }],
       sort: { created_at: 'asc' },
       limit: limit,
@@ -159,11 +169,19 @@ class HomePage extends Component {
 
   retrieveChurches = () => {
     const { days, region } = this.state;
+    const { user } = this.props.state;
     let parameter = {
       sort: { created_at: 'asc' },
+      condition: [{
+        value: user.id,
+        column: 'account_id',
+        clause: '!='
+      }],
       masses: {
         latitude: region.latitude,
         longitude: region.longitude
+        // latitude: 10.3241515,
+        // longitude: 123.9099824
       }
     }
     this.setState({ isLoading1: true })
