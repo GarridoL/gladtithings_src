@@ -6,7 +6,7 @@ import { Color, Helper, BasicStyles } from 'common';
 import LinearGradient from 'react-native-linear-gradient'
 import { Dimensions } from 'react-native';
 import Button from '../generic/Button.js'
-
+import { Spinner } from 'components';
 import Api from 'services/api/index.js';
 import { Routes } from 'common';
 
@@ -229,7 +229,12 @@ class Landing extends Component {
             }
             {
               isLoading && (
-                <View>
+                <View style={{
+                  flex: 1,
+                  alignItems: 'center',
+                  width: '100%'
+                }}>
+                  <Spinner mode="overlay" />
                 </View>
               )
             }
