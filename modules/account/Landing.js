@@ -7,11 +7,17 @@ import LinearGradient from 'react-native-linear-gradient'
 import { Dimensions } from 'react-native';
 import Button from '../generic/Button.js'
 
+import Api from 'services/api/index.js';
+import { Routes } from 'common';
+
 const width = Math.round(Dimensions.get('window').width);
 const height = Math.round(Dimensions.get('window').height);
 class Landing extends Component {
   constructor(props) {
     super(props);
+    this.state = { 
+      isLoading: true
+    }
   }
 
   onFocusFunction = async () => {
@@ -29,9 +35,73 @@ class Landing extends Component {
 
   componentDidMount() {
     this.getTheme()
+    this.getData()
     this.focusListener = this.props.navigation.addListener('didFocus', () => {
       this.onFocusFunction()
     })
+  }
+
+  getData = async () => {
+    try {
+      const temp = await AsyncStorage.getItem(Helper.APP_NAME + 'social');
+      const token = await AsyncStorage.getItem(Helper.APP_NAME + 'token');
+      console.log('======= get data', token);
+      if (token != null) {
+        this.setState({ token: token });
+        this.login();
+      }else{
+        this.setState({
+          isLoading: false
+        })
+      }
+    } catch (e) {
+      // error reading value
+    }
+  }
+
+  login = () => {
+    console.log('STATE TOKEN', this.state.token);
+    const { login } = this.props;
+    if (this.state.token != null) {
+      this.setState({ isLoading: true });
+      Api.getAuthUser(this.state.token, (response) => {
+        login(response, this.state.token);
+        let parameter = {
+          condition: [{
+            value: response.id,
+            clause: '=',
+            column: 'id'
+          }]
+        }
+        Api.request(Routes.accountRetrieve, parameter, userInfo => {
+          if (userInfo.data.length > 0) {
+            login(userInfo.data[0], this.state.token);
+            this.retrieveUserData(userInfo.data[0].id)
+          } else {
+            login(null, null)
+          }
+        }, error => {
+          console.log(error, 'login-account retrieve');
+        })
+      }, error => {
+        console.log(error, 'login-authenticate');
+        this.setState({ isResponseError: true, isLoading: false })
+      })
+    }
+  }
+
+  retrieveUserData = (accountId) => {
+    if (Helper.retrieveDataFlag == 1) {
+      this.setState({ isLoading: false });
+      const { setLayer } = this.props;
+      setLayer(0)
+      this.redirect('drawerStack')
+    }else{
+      this.setState({ isLoading: false });
+    }
+  }
+  redirect = (route) => {
+    this.props.navigation.navigate(route);
   }
 
   componentWillUnmount() { // C
@@ -76,8 +146,58 @@ class Landing extends Component {
     }
   }
 
+  renderEmpty(){
+
+    const { theme, language } = this.props.state;
+    return(
+      <View style={{
+        position: 'absolute',
+        bottom: 10,
+        alignItems: 'center'
+      }}>
+        <Button
+          style={{
+            width: '70%',
+            height: 50,
+            backgroundColor: theme ? theme.secondary : Color.secondary,
+            marginBottom: '15%'
+          }}
+          content={
+            <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
+              <Text style={{ color: 'white', fontSize: 15 }}>{language?.getStarted}</Text>
+            </View>
+          }
+          redirect={() => this.props.navigation.navigate('registerStack')}
+        />
+        <TouchableOpacity
+          onPress={() => this.props.navigation.navigate('loginStack')}>
+          <Text style={{
+            color: 'white',
+            fontSize: BasicStyles.standardFontSize + 2
+          }}>{language?.alreadyHaveAnAccount}&nbsp;&nbsp;
+          </Text>
+        </TouchableOpacity>
+        <Button
+          style={{
+            width: '70%',
+            height: 50,
+            backgroundColor: theme ? theme.secondary : Color.secondary,
+            marginTop: 20
+          }}
+          content={
+            <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
+              <Text style={{ color: 'white', fontSize: 15 }}>{language?.signIn}</Text>
+            </View>
+          }
+          redirect={() => this.props.navigation.navigate('loginStack')}
+        />
+      </View>
+    )
+  }
+
   render() {
     const { theme, language } = this.props.state;
+    const { isLoading } = this.state;
     return (
       <LinearGradient
         colors={theme && theme.gradient !== undefined && theme.gradient !== null ? theme.gradient : Color.gradient}
@@ -104,48 +224,15 @@ class Landing extends Component {
                 resizeMode: 'contain',
               }} />
             </View>
-            <View style={{
-              position: 'absolute',
-              bottom: 10,
-              alignItems: 'center'
-            }}>
-              <Button
-                style={{
-                  width: '70%',
-                  height: 50,
-                  backgroundColor: theme ? theme.secondary : Color.secondary,
-                  marginBottom: '15%'
-                }}
-                content={
-                  <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-                    <Text style={{ color: 'white', fontSize: 15 }}>{language?.getStarted}</Text>
-                  </View>
-                }
-                redirect={() => this.props.navigation.navigate('registerStack')}
-              />
-              <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('loginStack')}>
-                <Text style={{
-                  color: 'white',
-                  fontSize: BasicStyles.standardFontSize + 2
-                }}>{language?.alreadyHaveAnAccount}&nbsp;&nbsp;
-                </Text>
-              </TouchableOpacity>
-              <Button
-                style={{
-                  width: '70%',
-                  height: 50,
-                  backgroundColor: theme ? theme.secondary : Color.secondary,
-                  marginTop: 20
-                }}
-                content={
-                  <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-                    <Text style={{ color: 'white', fontSize: 15 }}>{language?.signIn}</Text>
-                  </View>
-                }
-                redirect={() => this.props.navigation.navigate('loginStack')}
-              />
-            </View>
+            {
+              !isLoading && this.renderEmpty()
+            }
+            {
+              isLoading && (
+                <View>
+                </View>
+              )
+            }
           </View>
         </ScrollView>
       </LinearGradient>
@@ -156,7 +243,9 @@ const mapStateToProps = state => ({ state: state });
 const mapDispatchToProps = dispatch => {
   const { actions } = require('@redux');
   return {
+    login: (user, token) => dispatch(actions.login(user, token)),
     setTheme: (theme) => dispatch(actions.setTheme(theme)),
+    setLayer: (layer) => dispatch(actions.setLayer(layer)),
     setDeepLinkRoute: (deepLinkRoute) => dispatch(actions.setDeepLinkRoute(deepLinkRoute)),
     setLanguage: (language) => dispatch(actions.setLanguage(language))
   };
