@@ -353,7 +353,7 @@ class Community extends Component {
                 })
                 this.popetwitterMessage()
               }}
-              title={"Pope's Messages"}
+              title={"Pope Francis"}
             />
           </View>
           {this.state.default == true &&

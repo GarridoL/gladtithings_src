@@ -172,7 +172,8 @@ class ViewEvent extends Component {
             style={{
               height: '100%',
               width: '100%',
-              borderRadius: 10
+              borderRadius: 10,
+              resizeMode: 'contain'
             }}
           />
         </View>}

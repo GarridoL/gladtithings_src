@@ -5,7 +5,7 @@ export default {
   image: {
     height: '100%',
     width: '100%',
-    resizeMode: 'stretch',
+    resizeMode: 'contain',
     borderRadius: 5
   },
   textInImageView: {
