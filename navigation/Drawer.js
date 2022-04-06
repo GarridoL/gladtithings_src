@@ -89,7 +89,8 @@ const _StackNavigator = createStackNavigator({
     navigationOptions: ({navigation}) => ({
       title: null,
       headerLeft: <Header navigation={navigation} />,
-      ...BasicStyles.drawerHeader
+      ...BasicStyles.drawerHeader,
+      headerMode: 'none'
     }),
   },
   TermsAndConditions: {

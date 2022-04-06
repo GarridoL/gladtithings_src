@@ -23,7 +23,10 @@ class HeaderOptions extends Component {
           <FontAwesomeIcon
             icon={faChevronLeft}
             size={BasicStyles.headerBackIconSize}
-            style={BasicStyles.iconStyle, {color: theme ? theme.primary : Color.primary}}
+            style={{
+              ...BasicStyles.iconStyle,
+              color: theme ? theme.primary : Color.primary
+            }}
           />
         </TouchableOpacity>
       </View>
@@ -52,7 +55,10 @@ class HeaderRightOptions extends Component {
           <FontAwesomeIcon
             icon={faCog}
             size={BasicStyles.headerBackIconSize}
-            style={BasicStyles.iconStyle, {color: theme ? theme.primary : Color.primary}}
+            style={{
+              ...BasicStyles.iconStyle,
+              color: theme ? theme.primary : Color.primary
+            }}
           />
         </TouchableOpacity>
       </View>

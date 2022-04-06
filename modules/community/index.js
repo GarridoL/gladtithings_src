@@ -226,7 +226,7 @@ class Community extends Component {
           <Card
             data={item}
             from={'suggestions'}
-            navigation={this.props.navigation}
+            props={{...this.props}}
           />
         ))}
         <View style={{
@@ -247,7 +247,7 @@ class Community extends Component {
           <Card
             data={item}
             from={'managed'}
-            navigation={this.props.navigation}
+            props={{...this.props}}
           />
         ))}
         <View style={{

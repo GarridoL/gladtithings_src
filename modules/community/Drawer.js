@@ -23,7 +23,10 @@ class HeaderOptions extends Component {
           <FontAwesomeIcon
             icon={faChevronLeft}
             size={BasicStyles.headerBackIconSize}
-            style={BasicStyles.iconStyle, {color: theme ? theme.primary : Color.primary}}
+            style={{
+              ...BasicStyles.iconStyle,
+              color: theme ? theme.primary : Color.primary
+            }}
           />
         </TouchableOpacity>
       </View>
@@ -45,7 +48,7 @@ const communityStack = createStackNavigator({
     navigationOptions: ({navigation}) => ({
       title: 'Community',
       headerLeft: <HeaderOptionsConnect navigationProps={navigation} />,
-      ...BasicStyles.headerDrawerStyle
+      ...BasicStyles.headerDrawerStyle,
     }),
   },
 });
