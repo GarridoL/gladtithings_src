@@ -39,22 +39,6 @@ class Index extends Component {
             paddingLeft: 20,
             paddingRight: 20
           }}>
-            <InputFieldWithIcon
-              placeholder={language.pageMembers.placeholder}
-              icon={faUser}
-              label={language.pageMembers.user}
-              onTyping={(title) => {
-                this.setState({title})
-              }}
-            />
-
-            <Text style={{
-              fontWeight: 'bold',
-              paddingTop: 20,
-              paddingBottom: 20
-            }}>
-              Accounts
-            </Text>
           </View>
         </ScrollView>
       </View>
