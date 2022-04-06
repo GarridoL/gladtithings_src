@@ -166,7 +166,10 @@ class Page extends Component {
           <FontAwesomeIcon
             icon={faCog}
             size={BasicStyles.headerBackIconSize}
-            style={BasicStyles.iconStyle, {color: theme ? theme.primary : Color.primary}}
+            style={{
+              ...BasicStyles.iconStyle, 
+              color: theme ? theme.primary : Color.primary
+            }}
           />
         </TouchableOpacity>
       </View>
