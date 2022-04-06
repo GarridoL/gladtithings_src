@@ -39,72 +39,9 @@ class Card extends Component {
               fontFamily: 'Poppins-SemiBold',
               fontWeight: 'bold'
             }}> {data.title}</Text>
-            <Text style={{
-              fontSize: BasicStyles.standardFontSize
-            }}>
-              Non Profit - 20k Followers - 10k Joined
-            </Text>
           </View>
          
         </View>
-      </View>
-    )
-  }
-
-  
-  renderSuggestions = (data) => {
-    return (
-      <View style={{
-        ...BasicStyles.standardWidth,
-        paddingTop: 10,
-        flexDirection: 'row',
-        justifyContent: 'flex-start',
-      }}>
-        <FontAwesomeIcon icon={faUsers} />
-        <Text style={{
-          fontSize: BasicStyles.standardFontSize,
-          paddingLeft: 10
-        }}>Follow & Join</Text>
-      </View>
-    )
-  }
-
-  renderJoined = (data) => {
-    return (
-      <View style={{
-        ...BasicStyles.standardWidth,
-        paddingTop: 10,
-        flexDirection: 'row',
-        justifyContent: 'flex-start',
-      }}>
-        <FontAwesomeIcon icon={faBan} />
-        <Text style={{
-          fontSize: BasicStyles.standardFontSize,
-          paddingLeft: 10
-        }}>Unfollow</Text>
-      </View>
-    )
-  }
-  renderManaged = (data) => {
-    return (
-      <View style={{
-        ...BasicStyles.standardWidth,
-        paddingTop: 10,
-        flexDirection: 'row',
-        justifyContent: 'flex-start',
-      }}>
-        {data.icon && <FontAwesomeIcon
-          icon={data.icon}
-          style={{
-            marginRight: 10,
-            marginLeft: 5
-          }}
-        />}
-        <FontAwesomeIcon icon={faUsers} />
-        <Text style={{
-          fontSize: BasicStyles.standardFontSize,
-          paddingLeft: 10
-        }}>Notifications</Text>
       </View>
     )
   }
@@ -133,15 +70,6 @@ class Card extends Component {
       }}
       >
         {this.renderHeader(data)}
-        {
-          this.props.from == 'suggestions' && this.renderSuggestions(data)
-        }
-        {
-          (this.props.from == 'joined') && this.renderJoined(data)
-        }
-        {
-          (this.props.from == 'managed') && this.renderManaged(data)
-        }
       </TouchableOpacity>
     )
   }
