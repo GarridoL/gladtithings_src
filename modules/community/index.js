@@ -69,6 +69,15 @@ class Community extends Component {
     })
   }
 
+  redirect(item){
+    this.props.navigation.navigate('pageScreen', {
+      data: {
+        ...item,
+        sub_title: 'Non Profit - 20k Followers - 10k Joined'
+      }
+    })
+  }
+
   componentDidUpdate() {
     const { searchPost } = this.props.state;
     console.log(searchPost, '--')
@@ -226,7 +235,7 @@ class Community extends Component {
           <Card
             data={item}
             from={'suggestions'}
-            props={{...this.props}}
+            navigation={this.props.navigation}
           />
         ))}
         <View style={{
