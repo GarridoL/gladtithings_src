@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
 import { View, Text, ScrollView, Dimensions, TouchableOpacity, Image } from 'react-native';
 import { Color, BasicStyles, Routes } from 'common';
-import Footer from 'modules/generic/Footer';
 import { connect } from 'react-redux';
-import IncrementButton from 'components/Form/Button';
-import {faUser, faEnvelope, faImage, faMapMarkerAlt, faGlobe, faSitemap} from '@fortawesome/free-solid-svg-icons';
+import {faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import Api from 'services/api';
 import _ from 'lodash';
-import { Spinner } from 'components';
 import InputFieldWithIcon from 'modules/generic/InputFieldWithIcon';
+import AccountCard from '../AccountCard';
+import Skeleton from 'components/Loading/Skeleton';
 
 
 const width = Math.round(Dimensions.get('window').width)
@@ -19,14 +18,36 @@ class Index extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoading: false
+      isLoading: false,
+      data: null
     }
   }
 
-  render() {
-    const { theme, language } = this.props.state;
-    const { isLoading } = this.state;
+  componentDidMount(){
     const { params } = this.props.navigation.state;
+    if(params == null || (params && params.data) == null){
+      return
+    }else{
+      this.setState({ isLoading: true })
+      Api.request(Routes.pageRetrieve, {}, response => {
+        this.setState({ isLoading: false })
+        if (response.data && response.data.length > 0) {
+          this.setState({
+            data: response.data
+          })
+        } else {
+          this.setState({
+            data: []
+          })
+        }
+      }, error => {
+        this.setState({ isLoading: false })
+      });
+    }
+  }
+  render() {
+    const { language } = this.props.state;
+    const { isLoading, data } = this.state;
     return (
       <View style={{
         height: height,
@@ -35,26 +56,40 @@ class Index extends Component {
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={{
             minHeight: height * 1.5,
-            width: '100%',
-            paddingLeft: 20,
-            paddingRight: 20
+            width: '100%'
           }}>
-            <InputFieldWithIcon
-              placeholder={language.pageRoles.placeholder}
-              icon={faUser}
-              label={language.pageRoles.user}
-              onTyping={(title) => {
-                this.setState({title})
-              }}
-            />
 
-            <Text style={{
-              fontWeight: 'bold',
-              paddingTop: 20,
-              paddingBottom: 20
+            <View style={{
+              paddingRight: 20,
+              paddingLeft: 20
             }}>
-              Accounts
-            </Text>
+              <InputFieldWithIcon
+                placeholder={language.pageRoles.placeholder}
+                icon={faUser}
+                label={language.pageRoles.user}
+                onTyping={(title) => {
+                  this.setState({title})
+                }}
+              />
+
+              <Text style={{
+                fontWeight: 'bold',
+                paddingTop: 20,
+                paddingBottom: 20
+              }}>
+                Accounts
+              </Text>
+            </View>
+            {
+              !isLoading && data && data.map((item) => (
+                <AccountCard data={item} />
+              ))
+            }
+            {
+              isLoading && (
+              <Skeleton template={'request'} />
+              )
+            }
           </View>
         </ScrollView>
       </View>
