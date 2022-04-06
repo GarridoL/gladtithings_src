@@ -26,6 +26,15 @@ class About extends Component {
     }
   }
 
+  submit(){
+    const { params } = this.props.navigation.state;
+    if(params == null || (params && params.data == null)){
+      return
+    }else{
+      // do the update here
+    }
+  }
+
   render() {
     const { theme, comments, language } = this.props.state;
     const { isLoading } = this.state;
