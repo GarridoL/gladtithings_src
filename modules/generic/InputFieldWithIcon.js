@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, TextInput, Dimensions} from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faEyeSlash, faEye } from '@fortawesome/free-solid-svg-icons';
-import { far } from '@fortawesome/free-brands-svg-icons'
 import { Color, BasicStyles } from 'common';
 import { connect } from 'react-redux';
 const width = Math.round(Dimensions.get('window').width)

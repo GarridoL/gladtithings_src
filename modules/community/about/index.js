@@ -1,18 +1,12 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, Dimensions, TouchableOpacity, Image } from 'react-native';
-import { Color, BasicStyles, Routes } from 'common';
-import Footer from 'modules/generic/Footer';
+import { View, ScrollView, Dimensions } from 'react-native';
+import { Color } from 'common';
 import { connect } from 'react-redux';
 import IncrementButton from 'components/Form/Button';
 import {faUser, faEnvelope, faImage, faMapMarkerAlt, faGlobe, faSitemap} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import Api from 'services/api';
 import _ from 'lodash';
-import { Spinner } from 'components';
 import InputFieldWithIcon from 'modules/generic/InputFieldWithIcon';
 
-
-const width = Math.round(Dimensions.get('window').width)
 const height = Math.round(Dimensions.get('window').height)
 
 class About extends Component {
