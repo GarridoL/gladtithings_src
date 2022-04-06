@@ -23,10 +23,18 @@ class About extends Component {
     }
   }
 
+  getValue(variable){
+    const { params } = this.props.navigation.state;
+    if(params && params.data){
+      return params.data[variable]
+    }else{
+      return null
+    }
+  }
+
   render() {
     const { theme, comments, language } = this.props.state;
     const { isLoading } = this.state;
-    const { params } = this.props.navigation.state;
     return (
       <View style={{
         height: height,
@@ -34,66 +42,76 @@ class About extends Component {
       }}>
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={{
-            minHeight: height * 1.5,
+            height: height * 1.5,
             width: '100%',
             paddingLeft: 20,
-            paddingRight: 20
+            paddingRight: 20,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between'
           }}>
-            <InputFieldWithIcon
-              placeholder={language.community.name_placeholder}
-              icon={faUser}
-              label={language.community.name}
-              onTyping={(title) => {
-                this.setState({title})
-              }}
-            />
-
-            <InputFieldWithIcon
-              placeholder={language.community.address_placeholder}
-              icon={faMapMarkerAlt}
-              label={language.community.address}
-              onTyping={(address) => {
-                this.setState({address})
-              }}
-            />
-
-            <InputFieldWithIcon
-              placeholder={language.community.category_placeholder}
-              icon={faSitemap}
-              label={language.community.category}
-              onTyping={(category) => {
-                this.setState({category})
-              }}
-            />
-
-            <InputFieldWithIcon
-              placeholder={language.community.website_placeholder}
-              icon={faGlobe}
-              label={language.community.website}
-              onTyping={(website) => {
-                this.setState({website})
-              }}
-            />
-
-            <InputFieldWithIcon
-              placeholder={language.community.email_placeholder}
-              icon={faEnvelope}
-              label={language.community.email}
-              onTyping={(email) => {
-                this.setState({email})
-              }}
-            />
-
             <View style={{
-              marginTop: 20,
-              marginBottom: 20
+              width: '100%'
             }}>
+              <InputFieldWithIcon
+                placeholder={language.community.name_placeholder}
+                icon={faUser}
+                label={language.community.name}
+                value={this.getValue('title')}
+                onTyping={(title) => {
+                  this.setState({title})
+                }}
+              />
+
+              <InputFieldWithIcon
+                placeholder={language.community.address_placeholder}
+                icon={faMapMarkerAlt}
+                value={this.getValue('address')}
+                label={language.community.address}
+                onTyping={(address) => {
+                  this.setState({address})
+                }}
+              />
+
+              <InputFieldWithIcon
+                placeholder={language.community.category_placeholder}
+                icon={faSitemap}
+                label={language.community.category}
+                value={this.getValue('category')}
+                onTyping={(category) => {
+                  this.setState({category})
+                }}
+              />
+
+              <InputFieldWithIcon
+                placeholder={language.community.website_placeholder}
+                icon={faGlobe}
+                label={language.community.website}
+                value={this.getValue('website')}
+                onTyping={(website) => {
+                  this.setState({website})
+                }}
+              />
+
+              <InputFieldWithIcon
+                placeholder={language.community.email_placeholder}
+                icon={faEnvelope}
+                label={language.community.email}
+                value={this.getValue('email')}
+                onTyping={(email) => {
+                  this.setState({email})
+                }}
+              />
+
+            </View>
+            <View style={{
+              width: '100%',
+              height: height * .7
+            }}> 
               
               <IncrementButton style={{
                   backgroundColor: Color.secondary,
-                  width: '100%',
-                  marginTop: 20,
-                  marginBottom: 100
+                  width: '100%'
                 }}
                 textStyle={{
                   fontFamily: 'Poppins-SemiBold'
