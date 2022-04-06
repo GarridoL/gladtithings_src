@@ -83,45 +83,6 @@ class About extends Component {
                 this.setState({email})
               }}
             />
-            
-            <Text
-              style={{marginTop: 22}}
-            >{language.community.logo}</Text>
-
-            <Text style={{
-              marginTop: 5,
-              fontSize: BasicStyles.standardFontSize - 2
-            }}>512px x 512px</Text>
-            <FontAwesomeIcon
-              icon={faImage}
-              size={150}
-              paddingHorizontal={200}
-              style={{
-                width: '100%',
-                borderWidth: 0.1,
-                marginTop: 20,
-                backgroundColor: Color.white,
-                borderRadius: 5,
-                
-              }}
-            />
-
-            <Text
-              style={{marginTop: 22}}
-            >{language.community.banner}</Text>
-            <FontAwesomeIcon
-              icon={faImage}
-              size={150}
-              paddingHorizontal={200}
-              style={{
-                width: '100%',
-                borderWidth: 0.1,
-                marginTop: 20,
-                backgroundColor: Color.white,
-                borderRadius: 5,
-                
-              }}
-            />
 
             <View style={{
               marginTop: 20,
@@ -140,7 +101,7 @@ class About extends Component {
                 onClick={() => {
                   this.submit()
                 }}
-                title={language.community.submit}
+                title={language.community.update}
               />
             </View>
           </View>

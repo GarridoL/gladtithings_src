@@ -217,7 +217,8 @@ export default {
     website_placeholder: 'Website(ES)',
     logo: 'Logo(ES)',
     banner: 'Banner(ES)',
-    submit: 'Submit(ES)'
+    submit: 'Submit(ES)',
+    update: 'Update(ES)'
   },
   subscription: {
     hi: 'Hola',
