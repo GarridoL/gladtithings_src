@@ -58,9 +58,9 @@ class Header extends Component {
           alignItems: 'center',
           justifyContent: 'center',
           width: width,
-          backgroundColor: this.props.navigation.state.routeName === 'Homepage' ? theme ? theme.primary : Color.primary : Color.containerBackground,
-          height: 60,
-          padding: 5
+          // backgroundColor: this.props.navigation.state.routeName === 'Homepage' ? theme ? theme.primary : Color.primary : Color.containerBackground,
+          // backgroundColor: 'red',
+          // height: 60
         }}>
         <TouchableOpacity
           style={{

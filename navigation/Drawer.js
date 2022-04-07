@@ -16,6 +16,7 @@ import MessagePage from 'src/modules/messagePage/index.js';
 
 import Style from './Style.js';
 import { connect } from 'react-redux'
+import Color from '../common/Color.js';
 
 // const width = Math.round(Dimensions.get('window').width);
 const width = Math.round(Dimensions.get('window').width);
@@ -57,7 +58,7 @@ const _StackNavigator = createStackNavigator({
     navigationOptions: ({navigation}) => ({
       title: null,
       headerLeft: <Header navigation={navigation} />,
-      ...BasicStyles.drawerHeader1
+      ...BasicStyles.drawerHeader2
     }),
   },
   Dashboard: {
@@ -65,7 +66,9 @@ const _StackNavigator = createStackNavigator({
     navigationOptions: ({navigation}) => ({
       title: null,
       headerLeft: <Header navigation={navigation} />,
-      ...BasicStyles.drawerHeader1
+      ...{...BasicStyles.drawerHeader1,
+      backgroundColor: 'red'
+      }
     }),
   },
   Settings: {
@@ -73,7 +76,7 @@ const _StackNavigator = createStackNavigator({
     navigationOptions: ({navigation}) => ({
       title: null,
       headerLeft: <Header navigation={navigation} />,
-      ...BasicStyles.drawerHeader
+      ...BasicStyles.drawerHeader1
     }),
   },
   Donations: {
@@ -81,7 +84,7 @@ const _StackNavigator = createStackNavigator({
     navigationOptions: ({navigation}) => ({
       title: null,
       headerLeft: <Header navigation={navigation} />,
-      ...BasicStyles.drawerHeader
+      ...BasicStyles.drawerHeader1
     }),
   },
   Community: {
@@ -89,7 +92,7 @@ const _StackNavigator = createStackNavigator({
     navigationOptions: ({navigation}) => ({
       title: null,
       headerLeft: <Header navigation={navigation} />,
-      ...BasicStyles.drawerHeader,
+      ...BasicStyles.drawerHeader1,
       headerMode: 'none'
     }),
   },
