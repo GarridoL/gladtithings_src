@@ -315,26 +315,45 @@ export default {
   drawerHeader: {
     headerStyle: {
       shadowColor: 'transparent',
-      elevation: 0,
+      // elevation: 0,
       borderBottomWidth: 0,
-      marginTop: Platform.OS == 'ios' ? 15 : 0
+      marginTop: Platform.OS == 'ios' ? -15 : 0
     }
   },
   drawerHeader1: {
     headerStyle: {
       shadowColor: 'transparent',
-      elevation: 0,
       borderBottomWidth: 0,
       justifyContent: 'center',
       alignItems: 'center',
       fontSize: 12,
       width: '100%',
       backgroundColor: Color.containerBackground,
-      height: 60,
-      marginTop: Platform.OS == 'ios' ? 15 : 0
+      // height: 60,
+      marginTop: Platform.OS == 'ios' ? 20 : 0
     },
     headerTitleContainerStyle: {
-      backgroundColor: Color.containerBackground,
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginLeft: '-10%'
+    },
+    headerTitleStyle: {
+      fontFamily: 'Poppins-SemiBold',
+    },
+  },
+  drawerHeader2: {
+    headerStyle: {
+      shadowColor: 'transparent',
+      borderBottomWidth: 0,
+      justifyContent: 'center',
+      alignItems: 'center',
+      fontSize: 12,
+      width: '100%',
+      backgroundColor: Color.primary,
+      // height: 60,
+      marginTop: Platform.OS == 'ios' ? 20 : 0
+    },
+    headerTitleContainerStyle: {
       justifyContent: 'center',
       alignItems: 'center',
       marginLeft: '-10%'
