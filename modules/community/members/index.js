@@ -13,22 +13,32 @@ class Index extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoading: false,
+      isLoading: true,
       data: null
     }
   }
 
   componentDidMount(){
-    this.retrieve()
+    // this.retrieve()
   }
 
   retrieve(){
     const { params } = this.props.navigation.state;
-    if(params == null || (params && params.data) == null){
+
+    console.log({
+      params
+    })
+    if(params == null || (params && params.data == null)){
       return
     }else{
       this.setState({ isLoading: true })
-      Api.request(Routes.pageAccountRetrieve, {}, response => {
+      Api.request(Routes.pageAccountRetrieve, {
+        condition: [{
+          value: params.data.id,
+          column: 'page_id',
+          clause: '='
+        }]
+      }, response => {
         this.setState({ isLoading: false })
         if (response.data && response.data.length > 0) {
           this.setState({
@@ -48,6 +58,9 @@ class Index extends Component {
   render() {
     const { isLoading } = this.state;
     const { data } = this.state;
+    console.log({
+      isLoading
+    })
     return (
       <View style={{
         height: height,
@@ -68,7 +81,7 @@ class Index extends Component {
 
             {
               isLoading && (
-              <Skeleton template={'request'} />
+                  <Skeleton template={'block'} size={5}/>
               )
             }
           </View>

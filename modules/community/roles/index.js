@@ -29,7 +29,7 @@ class Index extends Component {
 
   retrieve(){
     const { params } = this.props.navigation.state;
-    if(params == null || (params && params.data) == null){
+    if(params == null || (params && params.data == null)){
       return
     }else{
       this.setState({ isLoading: true })
@@ -49,7 +49,7 @@ class Index extends Component {
       });
     }
   }
-  
+
   render() {
     const { language } = this.props.state;
     const { isLoading, data } = this.state;
@@ -92,7 +92,7 @@ class Index extends Component {
             }
             {
               isLoading && (
-              <Skeleton template={'request'} />
+              <Skeleton template={'block'} size={5}/>
               )
             }
           </View>
