@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, ScrollView, Dimensions, TouchableOpacity, Image, Platform } from 'react-native';
 import { Color, BasicStyles, Routes } from 'common';
 import { connect } from 'react-redux';
-import {faChevronLeft, faImage, faCog, faSitemap, faPlus} from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faImage, faCog, faSitemap, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import _ from 'lodash';
 import Comments from 'src/components/Comments/index';
@@ -10,6 +10,8 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 import ImagePicker from 'react-native-image-picker';
 import ImageModal from 'components/Modal/ImageModalV2'
 import Config from 'src/config.js';
+import ImageResizer from 'react-native-image-resizer';
+import Api from 'services/api';
 
 const photoMenu = [{
   title: 'View Photo',
@@ -35,13 +37,19 @@ class Page extends Component {
     this.imageRef = React.createRef()
     this.state = {
       isLoading: false,
-      data: [],
+      data: null,
       image: null,
       viewImage: []
     }
   }
 
+  componentDidMount() {
+    const { params } = this.props.navigation.state;
+    this.setState({ data: params.data })
+  }
+
   upload = () => {
+    const { data, image } = this.state;
     const { user } = this.props.state
     const options = {
       noData: true
@@ -59,41 +67,96 @@ class Page extends Component {
       } else {
         ImageResizer.createResizedImage(response.uri, response.width * 0.5, response.height * 0.5, 'JPEG', 72, 0)
           .then(res => {
-
+            let formData = new FormData();
+            let uri = Platform.OS == "android" ? res.uri : res.uri.replace("file://", "");
+            formData.append("file", {
+              name: response.fileName,
+              type: response.type,
+              uri: uri
+            });
+            formData.append('file_url', response.fileName);
+            formData.append('account_id', user.id);
+            formData.append('category', image === 'profile' ? 'page-logo' : 'page-cover');
+            this.setState({ isLoading: true })
+            Api.upload(Routes.imageUpload, formData, respo => {
+              this.setState({ isLoading: false })
+              let details = null
+              let add = this.state.data.additional_informations
+              if (add !== null) {
+                if (image === 'profile') {
+                  details = {
+                    ...JSON.parse(add),
+                    profile: respo.data.data
+                  }
+                } else {
+                  details = {
+                    ...JSON.parse(add),
+                    cover: respo.data.data
+                  }
+                }
+              } else {
+                if (image === 'profile') {
+                  details = {
+                    profile: respo.data.data
+                  }
+                } else {
+                  details = {
+                    cover: respo.data.data
+                  }
+                }
+              }
+              let par = {
+                id: data?.id,
+                additional_informations: JSON.stringify(details)
+              }
+              this.setState({ isLoading: true })
+              Api.request(Routes.pageUpdate, par, resp => {
+                this.setState({ isLoading: false })
+                let dta = {
+                  ...data,
+                  additional_informations: JSON.stringify(details)
+                }
+                this.setState({data: dta});
+                this.RBSheet.close()
+              }, error => {
+                this.setState({ loading: true })
+              })
+            }, error => {
+              console.log(error)
+            })
           })
           .catch(err => {
-            // Oops, something went wrong. Check that the filename is correct and
-            // inspect err to get more details.
             console.log('[ERROR]', err)
           });
       }
-    })}
+    })
+  }
 
-  checkImage(params, payload){
-    if(params == null) return false
-    if(params && params.additional_informations == null) return false
-    if(params && params.additional_informations){
+  checkImage(params, payload) {
+    if (params == null) return false
+    if (params && params.additional_informations == null) return false
+    if (params && params.additional_informations) {
       let details = JSON.parse(params.additional_informations)
       console.log({
         details
       })
-      if(details && details.profile && payload == 'profile'){
+      if (details && details.profile && payload == 'profile') {
         return true
-      }else if(details && details.cover && payload == 'cover'){
+      } else if (details && details.cover && payload == 'cover') {
         return true
       }
     }
     return false
   }
 
-  getImage(params, payload){
-    if(params == null) return null
-    if(params && params.additional_informations == null) return null
-    if(params && params.additional_informations){
+  getImage(params, payload) {
+    if (params == null) return null
+    if (params && params.additional_informations == null) return null
+    if (params && params.additional_informations) {
       let details = JSON.parse(params.additional_informations)
-      if(details && details.profile && payload == 'profile'){
+      if (details && details.profile && payload == 'profile') {
         return Config.BACKEND_URL + details.profile
-      }else if(details && details.cover && payload == 'cover'){
+      } else if (details && details.cover && payload == 'cover') {
         return Config.BACKEND_URL + details.cover
       }
     }
@@ -101,8 +164,9 @@ class Page extends Component {
   }
 
 
-  imageOption(item){
-    switch(item.title.toLowerCase()){
+  imageOption(item) {
+    const { data } = this.state;
+    switch (item.title.toLowerCase()) {
       case 'change photo': {
         this.upload()
         break
@@ -110,10 +174,8 @@ class Page extends Component {
       case 'view photo': {
         this.RBSheet.close()
         let images = []
-        const { params } = this.props.navigation.state;
-        if(params && params.data){
-          let data = params.data
-          if(data && data.additional_informations){
+        if (data) {
+          if (data.additional_informations) {
             let details = JSON.parse(data.additional_informations)
             images.push(details[this.state.image])
           }
@@ -128,6 +190,7 @@ class Page extends Component {
   }
   header() {
     const { theme } = this.props.state;
+    const { data } = this.state;
     return (
       <View style={{
         flexDirection: 'row',
@@ -156,10 +219,10 @@ class Page extends Component {
           />
         </TouchableOpacity>
 
-        <TouchableOpacity 
+        <TouchableOpacity
           onPress={() => {
             this.props.navigation.navigate('pageSettingScreen', {
-              data: this.props.navigation.state.params.data
+              data: data
             })
           }}>
           {/*Donute Button Image */}
@@ -167,7 +230,7 @@ class Page extends Component {
             icon={faCog}
             size={BasicStyles.headerBackIconSize}
             style={{
-              ...BasicStyles.iconStyle, 
+              ...BasicStyles.iconStyle,
               color: theme ? theme.primary : Color.primary
             }}
           />
@@ -176,9 +239,9 @@ class Page extends Component {
     );
   }
 
-  pageImage(){
+  pageImage() {
     const { theme } = this.props.state;
-    const { params } = this.props.navigation.state;
+    const { data } = this.state;
     return (
       <View style={{
         marginBottom: 25
@@ -190,26 +253,26 @@ class Page extends Component {
           justifyContent: 'center',
           alignItems: 'center'
         }}
-        onPress={() => {
-          this.setState({
-            image: 'cover'
-          })
-          this.RBSheet.open()
-        }}
+          onPress={() => {
+            this.setState({
+              image: 'cover'
+            })
+            this.RBSheet.open()
+          }}
         >
-            {
-              params && this.checkImage(params.data, 'cover') ? (
-                <Image
-                  style={{
-                    width: width,
-                    height: height / 3
-                  }}
-                  source={{uri: this.getImage(params.data, 'cover')}}
-                />
-              ) : (
-                <FontAwesomeIcon icon={faPlus} size={height / 3} color={Color.gray}/>
-              )
-              }
+          {
+            data && this.checkImage(data, 'cover') ? (
+              <Image
+                style={{
+                  width: width,
+                  height: height / 3
+                }}
+                source={{ uri: this.getImage(data, 'cover') }}
+              />
+            ) : (
+              <FontAwesomeIcon icon={faPlus} size={height / 3} color={Color.gray} />
+            )
+          }
         </TouchableOpacity>
 
         <View style={{
@@ -225,7 +288,7 @@ class Page extends Component {
           alignItems: 'center',
           backgroundColor: theme ? theme.primary : Color.primary
         }}
-        
+
         >
           <TouchableOpacity
             onPress={() => {
@@ -246,42 +309,41 @@ class Page extends Component {
               borderColor: Color.secondary,
               borderWidth: 2
             }}
-            >
-              {
-               
-                params && this.checkImage(params.data, 'profile') ? (
-                  <Image
-                    style={{
-                      width: 50,
-                      height: 50,
-                      borderRadius: 25,
-                      borderWidth: 0.5,
-                      borderColor: Color.secondary
-                    }}
-                    source={{uri: this.getImage(params.data, 'profile')}}
-                  />
-                ) : (
-                  <FontAwesomeIcon icon={faSitemap} size={30} color={Color.gray}/>
-                )
-              }
-            
+          >
+            {
+              data && this.checkImage(data, 'profile') ? (
+                <Image
+                  style={{
+                    width: 50,
+                    height: 50,
+                    borderRadius: 25,
+                    borderWidth: 0.5,
+                    borderColor: Color.secondary
+                  }}
+                  source={{ uri: this.getImage(data, 'profile') }}
+                />
+              ) : (
+                <FontAwesomeIcon icon={faSitemap} size={30} color={Color.gray} />
+              )
+            }
+
           </TouchableOpacity>
           {
-            params.data && (
+            data && (
               <View style={{
                 width: '90%',
                 marginLeft: 10
               }}>
                 <Text style={{
                   fontWeight: 'bold'
-                }}>{params.data.title}</Text>
+                }}>{data.title}</Text>
                 <Text style={{
                   color: Color.white
-                }}>{params.data.sub_title}</Text>
+                }}>{data.sub_title}</Text>
               </View>
             )
           }
-          
+
         </View>
       </View>
     );
@@ -289,8 +351,7 @@ class Page extends Component {
 
 
   render() {
-    const { viewImage } = this.state;
-    const { params } = this.props.navigation.state;
+    const { viewImage, data } = this.state;
     return (
       <View style={{
         height: height,
@@ -307,41 +368,41 @@ class Page extends Component {
           dragFromTopOnly={true}
           closeOnPressMask={false}
           height={height / 2}>
-            {
-              photoMenu && photoMenu.map(item => (
-                <TouchableOpacity style={{
-                  width: '100%',
-                  paddingTop: 20,
-                  paddingBottom: 20,
-                  paddingRight: 20,
-                  paddingLeft: 20,
-                  borderBottomColor: Color.gray,
-                  borderBottomWidth: 0.5
-                }}
+          {
+            photoMenu && photoMenu.map(item => (
+              <TouchableOpacity style={{
+                width: '100%',
+                paddingTop: 20,
+                paddingBottom: 20,
+                paddingRight: 20,
+                paddingLeft: 20,
+                borderBottomColor: Color.gray,
+                borderBottomWidth: 0.5
+              }}
                 onPress={() => {
                   this.imageOption(item)
                 }}
-                >
-                  <View>
-                    <Text>{item.title}</Text>
-                  </View>
-                </TouchableOpacity>
-              ))
-            }
+              >
+                <View>
+                  <Text>{item.title}</Text>
+                </View>
+              </TouchableOpacity>
+            ))
+          }
         </RBSheet>
-        
-        
+
+
         <ImageModal
           images={viewImage}
           ref={this.imageRef}
         />
-        
+
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={{
             minHeight: height * 1.5,
             width: '100%'
           }}>
-            
+
             {
               this.pageImage()
             }
@@ -351,8 +412,8 @@ class Page extends Component {
               withImages={true}
               payload={{
                 payload: 'page',
-                payload_value: params?.data?.id
-            }}/>
+                payload_value: data?.id
+              }} />
           </View>
         </ScrollView>
       </View>

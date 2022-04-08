@@ -16,31 +16,6 @@ import { WebView } from 'react-native-webview';
 const width = Math.round(Dimensions.get('window').width)
 const height = Math.round(Dimensions.get('window').height)
 
-const dataPope = [
-  {
-    id: 0,
-    account: {
-      id: 0,
-      username: 'Pope Francis',
-      first_name: 'Pope',
-      last_name: 'Francis'
-    },
-    text: "May Saints Cyril and Methodius, precursors of #ecumenism, help us make every effort to work for a reconciliation of diversity in the Holy Spirit: a unity that, witout being uniformity, is capable of being a sign and witness to the freedom of Christ, the Lord. #ApostolicJourney",
-    created_at_human: 'Just Now',
-  },
-  {
-    id: 1,
-    account: {
-      id: 0,
-      username: 'Pope Francis',
-      first_name: 'Pope',
-      last_name: 'Francis'
-    },
-    text: "The Eucharist is here to remind us who God is. It does not do so just in words, but in a concrete way, showing us God as bread broken, as love crucified and  bestowed. #EcharisticCongress #Budapest",
-    created_at_human: 'Just Now',
-  }
-]
-
 class Community extends Component {
   constructor(props) {
     super(props);
