@@ -56,6 +56,8 @@ export default {
   pageUpdate: apiUrl + 'pages/update',
   pageDelete: apiUrl + 'pages/delete',
   pageRetrieve: apiUrl + 'pages/retrieve',
+  pageRoleRetrieve: apiUrl + 'page_roles/retrieve',
+  pageAccountRetrieve: apiUrl + 'page_accounts/retrieve',
   paypalCreateOrder: apiUrl + 'paypal/create_order',
   paypalCaptureOrder: apiUrl + 'paypal/capture_order',
   uploadImage: apiUrl + 'payloads/create',
@@ -88,5 +90,5 @@ export default {
   confirmPaymentIntent: apiUrl + 'stripe_webhooks/confirm_payment',
   fileUpload: apiUrl + 'files/upload_file',
   unionBankAuthorize: apiUrl + 'union_bank/authorize',
-  paymayaAuthorize: apiUrl + 'paymaya/checkout'
+  paymayaAuthorize: apiUrl + 'paymaya/checkout',
 };

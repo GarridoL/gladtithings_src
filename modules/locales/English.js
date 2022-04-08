@@ -253,6 +253,7 @@ export default {
   pageRoles: {
     placeholder: 'Username or Email Address',
     user: 'Invite Member',
+    accountLabel: 'Accounts'
   },
   pageMembers: {
     placeholder: 'Username or Email Address',

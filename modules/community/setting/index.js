@@ -1,15 +1,8 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, Dimensions, TouchableOpacity, Image } from 'react-native';
-import { Color, BasicStyles, Routes } from 'common';
-import Footer from 'modules/generic/Footer';
+import { View, ScrollView, Dimensions } from 'react-native';
+import { Color } from 'common';
 import { connect } from 'react-redux';
-import IncrementButton from 'components/Form/Button';
-import { faBell, faBan, faUsers, faPlus } from '@fortawesome/free-solid-svg-icons';
-import {faChevronLeft, faShare, faCog} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import Api from 'services/api';
 import _ from 'lodash';
-import { Spinner } from 'components';
 import CardsWithIcon from 'modules/generic/CardsWithIcon';
 
 

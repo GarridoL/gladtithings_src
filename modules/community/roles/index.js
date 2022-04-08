@@ -24,12 +24,16 @@ class Index extends Component {
   }
 
   componentDidMount(){
+    this.retrieve()
+  }
+
+  retrieve(){
     const { params } = this.props.navigation.state;
     if(params == null || (params && params.data) == null){
       return
     }else{
       this.setState({ isLoading: true })
-      Api.request(Routes.pageRetrieve, {}, response => {
+      Api.request(Routes.pageRoleRetrieve, {}, response => {
         this.setState({ isLoading: false })
         if (response.data && response.data.length > 0) {
           this.setState({
@@ -45,6 +49,7 @@ class Index extends Component {
       });
     }
   }
+  
   render() {
     const { language } = this.props.state;
     const { isLoading, data } = this.state;
@@ -77,7 +82,7 @@ class Index extends Component {
                 paddingTop: 20,
                 paddingBottom: 20
               }}>
-                Accounts
+                {language.pageRoles.accountLabel}
               </Text>
             </View>
             {

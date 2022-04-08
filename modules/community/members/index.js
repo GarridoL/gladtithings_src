@@ -1,32 +1,53 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, Dimensions, TouchableOpacity, Image } from 'react-native';
+import { View, Text, ScrollView, Dimensions} from 'react-native';
 import { Color, BasicStyles, Routes } from 'common';
-import Footer from 'modules/generic/Footer';
 import { connect } from 'react-redux';
-import IncrementButton from 'components/Form/Button';
-import {faUser, faEnvelope, faImage, faMapMarkerAlt, faGlobe, faSitemap} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import Api from 'services/api';
 import _ from 'lodash';
-import { Spinner } from 'components';
-import InputFieldWithIcon from 'modules/generic/InputFieldWithIcon';
+import Skeleton from 'components/Loading/Skeleton';
+import AccountCard from '../AccountCard';
 
-
-const width = Math.round(Dimensions.get('window').width)
 const height = Math.round(Dimensions.get('window').height)
 
 class Index extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoading: false
+      isLoading: false,
+      data: null
     }
   }
 
-  render() {
-    const { theme, language } = this.props.state;
-    const { isLoading } = this.state;
+  componentDidMount(){
+    this.retrieve()
+  }
+
+  retrieve(){
     const { params } = this.props.navigation.state;
+    if(params == null || (params && params.data) == null){
+      return
+    }else{
+      this.setState({ isLoading: true })
+      Api.request(Routes.pageAccountRetrieve, {}, response => {
+        this.setState({ isLoading: false })
+        if (response.data && response.data.length > 0) {
+          this.setState({
+            data: response.data
+          })
+        } else {
+          this.setState({
+            data: []
+          })
+        }
+      }, error => {
+        this.setState({ isLoading: false })
+      });
+    }
+  }
+  
+  render() {
+    const { isLoading } = this.state;
+    const { data } = this.state;
     return (
       <View style={{
         height: height,
@@ -39,6 +60,17 @@ class Index extends Component {
             paddingLeft: 20,
             paddingRight: 20
           }}>
+            {
+              !isLoading && data && data.map((item) => (
+                <AccountCard data={item} />
+              ))
+            }
+
+            {
+              isLoading && (
+              <Skeleton template={'request'} />
+              )
+            }
           </View>
         </ScrollView>
       </View>
