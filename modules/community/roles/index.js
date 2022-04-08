@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, Dimensions, TouchableOpacity, Image } from 'react-native';
-import { Color, BasicStyles, Routes } from 'common';
+import { View, Text, ScrollView, Dimensions} from 'react-native';
+import { Color, Routes } from 'common';
 import { connect } from 'react-redux';
 import {faUser } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import Api from 'services/api';
 import _ from 'lodash';
 import InputFieldWithIcon from 'modules/generic/InputFieldWithIcon';
 import AccountCard from '../AccountCard';
 import Skeleton from 'components/Loading/Skeleton';
+import Empty from 'modules/generic/Empty'
 
 
 const width = Math.round(Dimensions.get('window').width)
@@ -41,7 +41,7 @@ class Index extends Component {
           })
         } else {
           this.setState({
-            data: []
+            data: null
           })
         }
       }, error => {
@@ -84,17 +84,26 @@ class Index extends Component {
               }}>
                 {language.pageRoles.accountLabel}
               </Text>
+
+              {
+                !isLoading && data && data.map((item) => (
+                  <AccountCard data={item} />
+                ))
+              }
+              {
+                isLoading && (
+                <Skeleton template={'block'} size={5}/>
+                )
+              }
+              {
+                !isLoading && data == null && (
+                  <Empty 
+                    message={'No accounts'}
+                  />
+                )
+              }
+
             </View>
-            {
-              !isLoading && data && data.map((item) => (
-                <AccountCard data={item} />
-              ))
-            }
-            {
-              isLoading && (
-              <Skeleton template={'block'} size={5}/>
-              )
-            }
           </View>
         </ScrollView>
       </View>

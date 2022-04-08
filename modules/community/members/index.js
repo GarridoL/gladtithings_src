@@ -6,6 +6,7 @@ import Api from 'services/api';
 import _ from 'lodash';
 import Skeleton from 'components/Loading/Skeleton';
 import AccountCard from '../AccountCard';
+import Empty from 'modules/generic/Empty'
 
 const height = Math.round(Dimensions.get('window').height)
 
@@ -13,13 +14,13 @@ class Index extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoading: true,
+      isLoading: false,
       data: null
     }
   }
 
   componentDidMount(){
-    // this.retrieve()
+    this.retrieve()
   }
 
   retrieve(){
@@ -46,7 +47,7 @@ class Index extends Component {
           })
         } else {
           this.setState({
-            data: []
+            data: null
           })
         }
       }, error => {
@@ -58,9 +59,6 @@ class Index extends Component {
   render() {
     const { isLoading } = this.state;
     const { data } = this.state;
-    console.log({
-      isLoading
-    })
     return (
       <View style={{
         height: height,
@@ -82,6 +80,13 @@ class Index extends Component {
             {
               isLoading && (
                   <Skeleton template={'block'} size={5}/>
+              )
+            }
+            {
+              !isLoading && data == null && (
+                <Empty 
+                  message={'No accounts'}
+                />
               )
             }
           </View>
