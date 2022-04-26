@@ -458,11 +458,11 @@ class Deposit extends Component {
                     />}
               </View>
             </View>
-            {params?.type ===
-              'Subscription Donation' && <View style={{ width: '100%', alignItems: 'center' }}>
-                <Text style={{ fontWeight: 'bold', alignItems: 'center', alignContent: 'center', marginTop: 5 }}>Choose your Plan</Text>
-                {this.cycle()}
-              </View>}
+            {(params?.type === 'Subscription Donation' || params?.type === 'Edit Subscription Donation') && 
+            <View style={{ width: '100%', alignItems: 'center' }}>
+              <Text style={{ fontWeight: 'bold', alignItems: 'center', alignContent: 'center', marginTop: 5 }}>Choose your Plan</Text>
+              {this.cycle()}
+            </View>}
           </View>
         </ScrollView>
         <View
