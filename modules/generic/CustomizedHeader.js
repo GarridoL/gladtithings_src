@@ -3,7 +3,7 @@ import { View, Image, Dimensions, Text } from 'react-native'
 import { BasicStyles, Color } from 'common';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faCalendarCheck, faChurch, faExclamationTriangle, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
+import { faCalendarCheck, faChurch, faExclamationTriangle, faImage, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 import Button from '../generic/Button.js'
 import Config from 'src/config.js';
 
@@ -72,16 +72,24 @@ class CustomizedHeader extends Component {
           width: '50%',
           height: (height / 4) - 40,
           backgroundColor: 'white',
-          borderRadius: 10
+          borderRadius: 10,
+          justifyContent: 'center',
+          alignItems: 'center'
         }}>
-          <Image
+          {data?.merchant_details?.logo ? <Image
             source={{ uri: Config.BACKEND_URL + data?.merchant_details?.logo }}
             style={{
               height: '100%',
               width: '100%',
               borderRadius: 10
             }}
-          />
+          /> : <FontAwesomeIcon
+          icon={faImage}
+          size={100}
+          style={{
+            color: Color.gray
+          }}
+        /> }
         </View>
         <View style={{
           width: '50%',
