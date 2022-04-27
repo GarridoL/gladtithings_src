@@ -207,16 +207,25 @@ export default {
     }
   },
   cycles:[{
-    value: 'monthly',
-    title: 'Monthly'
+    key: 1,
+    label: 'Weekly'
   }, {
-    value: 'quarterly',
-    title: 'Quarterly'
+    key: 2,
+    label: 'Twice a week'
   }, {
-    value: 'semi-annually',
-    title: 'Semi-annually'
+    key: 3,
+    label: 'End of the month'
   }, {
-    value: 'annually',
-    title: 'Annually'
+    key: 4,
+    label: 'Monthly'
+  }, {
+    key: 5,
+    label: 'Quarterly'
+  }, {
+    key: 6,
+    label: 'Semi-annually'
+  }, {
+    key: 7,
+    label: 'Annually'
   }]
 };

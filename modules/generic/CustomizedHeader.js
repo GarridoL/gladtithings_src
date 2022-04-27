@@ -28,7 +28,7 @@ class CustomizedHeader extends Component {
           padding: 10,
           fontSize: 13
         }}>
-          {language.subscription.hi}, {user.account_information.first_name + ' ' + user.account_information.last_name}. {language.subscription.greet} {text}
+          {language.subscription.hi}, {user.account_information.first_name !== null ? (user.account_information.first_name + ' ' + user.account_information.last_name) : user.username}. {language.subscription.greet} {text}
         </Text>
         <Button
           style={{
@@ -111,8 +111,9 @@ class CustomizedHeader extends Component {
               style={{ marginRight: 5 }}
             />
             <Text style={{
-              fontFamily: 'Poppins-SemiBold'
-            }}>$ {data != null ? data?.amount.toFixed(2) : 0} / {data?.cycle}</Text>
+              fontFamily: 'Poppins-SemiBold',
+              textTransform: 'capitalize'
+            }}>$ {data != null ? data?.amount.toFixed(2) : 0} / {data.cycle}</Text>
           </View>
           <View style={{
             flexDirection: 'row',
@@ -222,8 +223,9 @@ class CustomizedHeader extends Component {
               style={{ marginRight: 5 }}
             />
             <Text style={{
-              fontFamily: 'Poppins-SemiBold'
-            }}>$ {data.amount.toFixed(2)} / {data?.cycle}</Text>
+              fontFamily: 'Poppins-SemiBold',
+              textTransform: 'capitalize'
+            }}>$ {data.amount.toFixed(2)} / {data.cycle}</Text>
           </View>
           <View style={{
             flexDirection: 'row',

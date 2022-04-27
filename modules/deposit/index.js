@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, Dimensions, Alert, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, Dimensions, Alert, TouchableOpacity, TextInput } from 'react-native';
 import { Color, Routes, Helper, BasicStyles } from 'common';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
@@ -9,6 +9,7 @@ import CustomizedHeader from '../generic/CustomizedHeader';
 import { Spinner } from 'components';
 import Api from 'services/api/index.js';
 import AmountInput from 'modules/generic/AmountInput'
+import ModalSelector from 'react-native-modal-selector'
 
 const width = Math.round(Dimensions.get('window').width);
 const height = Math.round(Dimensions.get('window').height);
@@ -23,8 +24,7 @@ class Deposit extends Component {
       subscribeId: null,
       currency: 'USD',
       ledger: null,
-      cycle: null,
-      radioSelected: null
+      cycle: null
     };
   }
 
@@ -46,55 +46,35 @@ class Deposit extends Component {
     ]);
   }
 
+  onChange(input) {
+    this.setState({ cycle: input })
+  }
+
   cycle = () => {
-    const { cycle, radioSelected } = this.state;
+    const { data } = this.props.navigation?.state?.params;
     const { theme } = this.props.state;
     return (
-      <View style={{ flexWrap: 'wrap', flex: 1 }}>
-        {Helper.cycles.map((val) => {
-          return (
-            <TouchableOpacity
-              style={{
-                flexDirection: 'row', alignContent: 'center', alignItems: 'center',
-                justifyContent: 'center',
-              }}
-              key={val.value} onPress={() => {
-                this.setState({
-                  cycle: val.value
-                })
-              }}>
-              <View style={{
-                height: 24,
-                width: 24,
-                borderRadius: 12,
-                borderWidth: 2,
-                borderColor: theme ? theme.primary : Color.primary,
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderWidth: 1,
-                marginTop: '5%',
-              }}>
-                {
-                  val.value == (cycle != null ? cycle : radioSelected) ?
-                    <View style={{
-                      height: 12,
-                      width: 12,
-                      borderRadius: 6,
-                      backgroundColor: theme ? theme.primary : Color.primary
-                    }} />
-                    : null
-                }
-              </View>
-              <Text style={{
-                // flexDirection: 'column',
-                marginTop: '5%', marginLeft: '5%'
-              }}>{val.title}</Text>
-            </TouchableOpacity>
-          )
-        })}
+      <View
+        style={{
+          flexDirection: 'row',
+          padding: 15
+        }}>
+
+        <ModalSelector
+          data={Helper.cycles}
+          initValue="Click here to select"
+          selectTextStyle={{color: Color.white}}
+          style={{width: '50%'}}
+          selectStyle={{backgroundColor: theme ? theme.primary : Color.primary, borderRadius: 25}}
+          selectedKey={data.cycle === 'Weekly' ? 1 : data.cycle === 'Twice a week' ? 2 : data.cycle === 'End of the month' ? 3 : data.cycle === 'Monthly' ? 4 : data.cycle === 'Quarterly' ? 5 : data.cycle === 'Semi-annually' ? 6 : data.cycle === 'Annually' ? 7 : ''}
+          onChange={(option) => { this.setState({
+            cycle: option.label
+          }) }} />
+
       </View>
     );
   }
+
 
   proceed = () => {
     const { params } = this.props.navigation.state;
@@ -341,7 +321,6 @@ class Deposit extends Component {
     const { amount, isLoading } = this.state;
     const { data } = this.props.navigation?.state?.params;
     const { params } = this.props.navigation?.state
-    console.log(params?.type, '-----')
     return (
       <View
         style={{
@@ -458,9 +437,9 @@ class Deposit extends Component {
                     />}
               </View>
             </View>
-            {params?.type ===
-              'Subscription Donation' && <View style={{ width: '100%', alignItems: 'center' }}>
-                <Text style={{ fontWeight: 'bold', alignItems: 'center', alignContent: 'center', marginTop: 5 }}>Choose your Plan</Text>
+            {(params?.type === 'Subscription Donation' || params?.type === 'Edit Subscription Donation') &&
+              <View style={{ width: '100%', alignItems: 'center' }}>
+                <Text style={{ fontWeight: '500', alignItems: 'center', alignContent: 'center', marginTop: 5 }}>{language.subscription.choosePlan}</Text>
                 {this.cycle()}
               </View>}
           </View>
