@@ -117,7 +117,6 @@ class Subscriptions extends Component {
   render() {
     const { language, theme } = this.props.state;
     const { subscription, payment, isLoading, dataLimit, data, dataPayment, dataNoLimit } = this.state;
-    console.log('[>>>>>>>>>>>]', data)
     return (
       <View style={{
         height: height,

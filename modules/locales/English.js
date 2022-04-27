@@ -235,7 +235,8 @@ export default {
     message: 'Message',
     noBillings: 'You do not have any subscription on this church.',
     noChurchSelectedMessage: `You don't have church selected for now. Kindly click the button below to look for church you are interested to automate your tithings.`,
-    ChurchSelectedMessage: `Here are the list of churches you are subscribed. Click the button below to look for more churches you are interested to automate your tithings.`
+    ChurchSelectedMessage: `Here are the list of churches you are subscribed. Click the button below to look for more churches you are interested to automate your tithings.`,
+    choosePlan: 'Choose your Plan'
   },
   pageMenuSetting: [{
     title: 'About',

@@ -28,7 +28,7 @@ class CustomizedHeader extends Component {
           padding: 10,
           fontSize: 13
         }}>
-          {language.subscription.hi}, {user.account_information.first_name + ' ' + user.account_information.last_name}. {language.subscription.greet} {text}
+          {language.subscription.hi}, {user.account_information.first_name !== null ? (user.account_information.first_name + ' ' + user.account_information.last_name) : user.username}. {language.subscription.greet} {text}
         </Text>
         <Button
           style={{
