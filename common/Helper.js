@@ -121,35 +121,35 @@ export default {
   //     amount: 2
   //   }
   // },
-  // {
-  //   title: 'PayPal',
-  //   description: 'PayPal Authorized',
-  //   fees: '3% Fee',
-  //   logo: require('assets/paypal.png'),
-  //   color: Color.gray,
-  //   code: 'PAYPAL',
-  //   type: 'ewallet',
-  //   country: 'International',
-  //   currency: 'USD',
-  //   feeConfiguration: {
-  //     type: 'percentage',
-  //     amount: 3
-  //   }
-  // }, {
-  //   title: 'Stripe CC / DC',
-  //   description: '0000-0000-0000-0000',
-  //   fees: '3% Fee',
-  //   logo: require('assets/stripe.png'),
-  //   color: Color.primary,
-  //   code: 'STRIPE',
-  //   type: 'bank',
-  //   country: 'International',
-  //   currency: 'USD',
-  //   feeConfiguration: {
-  //     type: 'percentage',
-  //     amount: 3
-  //   }
-  // }, 
+  {
+    title: 'PayPal',
+    description: 'PayPal Authorized',
+    fees: '3% Fee',
+    logo: require('assets/paypal.png'),
+    color: Color.gray,
+    code: 'PAYPAL',
+    type: 'ewallet',
+    country: 'International',
+    currency: 'USD',
+    feeConfiguration: {
+      type: 'percentage',
+      amount: 3
+    }
+  }, {
+    title: 'Credit Card / Debit Card',
+    description: '0000-0000-0000-0000',
+    fees: '3% Fee',
+    logo: require('assets/stripe.png'),
+    color: Color.primary,
+    code: 'STRIPE',
+    type: 'bank',
+    country: 'International',
+    currency: 'USD',
+    feeConfiguration: {
+      type: 'percentage',
+      amount: 3
+    }
+  }, 
   {
     title: 'Google Pay',
     description: '0000-0000-0000-0000',
