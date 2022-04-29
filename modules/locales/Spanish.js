@@ -235,7 +235,8 @@ export default {
     message: 'Mensaje',
     noBillings: 'No tienes ninguna suscripción en esta iglesia.',
     noChurchSelectedMessage: `No tienes una iglesia seleccionada por ahora. Por favor haga clic en el botón de abajo para buscar la iglesia que le interesa para automatizar sus diezmos.`,
-    ChurchSelectedMessage: `Aquí está la lista de iglesias a las que está suscrito. Haga clic en el botón de abajo para buscar más iglesias que le interesen para automatizar sus diezmos.`
+    ChurchSelectedMessage: `Aquí está la lista de iglesias a las que está suscrito. Haga clic en el botón de abajo para buscar más iglesias que le interesen para automatizar sus diezmos.`,
+    choosePlan: 'Elige tu plan'
   },
   pageMenuSetting: [{
     title: 'About(ES)',

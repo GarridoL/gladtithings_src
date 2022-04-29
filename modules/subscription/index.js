@@ -3,9 +3,7 @@ import { View, Text, ScrollView, Dimensions, TouchableOpacity, Alert } from 'rea
 import { Color, Routes } from 'common';
 import CardsWithIcon from 'modules/generic/CardsWithIcon';
 import { connect } from 'react-redux';
-import PaymentMethodCard from 'modules/generic/Cards';
 import CustomizedHeader from 'modules/generic/CustomizedHeader';
-import Button from 'modules/generic/Button';
 import Api from 'services/api/index.js';
 
 import Skeleton from 'components/Loading/Skeleton';

@@ -251,7 +251,8 @@ class HomePage extends Component {
                   address: currentSubscription.address,
                 },
                 amount: currentSubscription.amount,
-                next_month: currentSubscription.next_month
+                next_month: currentSubscription.next_month,
+                cycle: currentSubscription.cycle
               }}
               redirect={() => {
                 this.props.navigation.navigate('subscriptionStack')
