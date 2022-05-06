@@ -269,7 +269,8 @@ export default {
     emptyMasses: 'No nearby masses.'
   },
   homepage: {
-    noSubscription: 'You do not have any church subscriptions. Click "Find Church" below to look for churches that interests you.'
+    noSubscription: 'You do not have any church subscriptions. Click "Find Church" below to look for churches that interests you.',
+    seeMore: 'See More'
   },
   events: {
     attend: 'Attend'

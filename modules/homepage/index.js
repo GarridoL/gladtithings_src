@@ -356,9 +356,9 @@ class HomePage extends Component {
                 button={true}
                 data={recentlyVisited}
                 buttonColor={theme ? theme.secondary : Color.secondary}
-                buttonTitle={language.subscribe}
+                buttonTitle={language.homepage.seeMore}
                 redirect={(index) => { this.props.navigation.navigate('churchProfileStack', { data: index }) }}
-                buttonClick={(item) => { this.props.navigation.navigate('otherTransactionStack', { type: 'Subscription Donation', data: item }) }}
+                buttonClick={(item) => { this.props.navigation.navigate('churchProfileStack', { data: item }) }}
               />
               {events.length > 0 && <View style={Style.title}>
                 <Text
