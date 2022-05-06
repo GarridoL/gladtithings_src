@@ -113,7 +113,7 @@ class CustomizedHeader extends Component {
             <Text style={{
               fontFamily: 'Poppins-SemiBold',
               textTransform: 'capitalize'
-            }}>$ {data != null ? data?.amount.toFixed(2) : 0} / {data.cycle}</Text>
+            }}>$ {data != null ? data?.amount.toFixed(2) : 0} / {data?.cycle}</Text>
           </View>
           <View style={{
             flexDirection: 'row',
@@ -225,7 +225,7 @@ class CustomizedHeader extends Component {
             <Text style={{
               fontFamily: 'Poppins-SemiBold',
               textTransform: 'capitalize'
-            }}>$ {data.amount.toFixed(2)} / {data.cycle}</Text>
+            }}>$ {data.amount.toFixed(2)} / {data?.cycle}</Text>
           </View>
           <View style={{
             flexDirection: 'row',

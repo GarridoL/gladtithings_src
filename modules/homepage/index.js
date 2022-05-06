@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import Api from 'services/api/index.js';
 import Skeleton from 'components/Loading/Skeleton';
-import {Spinner} from 'components';
+import { Spinner } from 'components';
 import Geolocation from '@react-native-community/geolocation';
 
 const width = Math.round(Dimensions.get('window').width)
@@ -69,7 +69,7 @@ class HomePage extends Component {
     })
   }
 
-  
+
   retrieveAllSubscriptions = () => {
     const { user } = this.props.state;
     let parameter = {
@@ -82,13 +82,15 @@ class HomePage extends Component {
         response.data.map(item => {
           item.merchant_details.address = JSON.parse(item.merchant_details?.address)?.name
         })
-        this.setState({ currentSubscription: {
-          ...response.data[0],
-          address: response.data[0].merchant_details.address,
-          amount: 20,
-          date: response.data[0].next_month,
-          logo: response.data[0].merchant_details.logo
-        }})
+        this.setState({
+          currentSubscription: {
+            ...response.data[0],
+            address: response.data[0].merchant_details.address,
+            amount: 20,
+            date: response.data[0].next_month,
+            logo: response.data[0].merchant_details.logo
+          }
+        })
       }
     }, error => {
       console.log(error);
@@ -109,23 +111,23 @@ class HomePage extends Component {
         clause: '!='
       }],
       limit: 6,
-      sort: {created_at: 'desc'}
+      sort: { created_at: 'desc' }
     }
-    this.setState({isLoading: true});
+    this.setState({ isLoading: true });
     console.log(parameter, Routes.recentlyVisitedChurchesRetrieve)
     Api.request(Routes.recentlyVisitedChurchesRetrieve, parameter, response => {
-      this.setState({isLoading: false});
+      this.setState({ isLoading: false });
       let temp = []
-      if(response.data?.length > 0) {
+      if (response.data?.length > 0) {
         response.data.map((item, index) => {
-         temp.push({
-          id: item.merchant.id,
-          address: JSON.parse(item.merchant?.address)?.name,
-          logo: item.merchant.logo,
-          name: item.merchant.name,
-          account_id: item.merchant.account_id,
-          addition_informations: item.merchant.addition_informations
-         })
+          temp.push({
+            id: item.merchant.id,
+            address: JSON.parse(item.merchant?.address)?.name,
+            logo: item.merchant.logo,
+            name: item.merchant.name,
+            account_id: item.merchant.account_id,
+            addition_informations: item.merchant.addition_informations
+          })
         })
       }
       this.setState({ recentlyVisited: temp })
@@ -151,9 +153,9 @@ class HomePage extends Component {
       limit: limit,
       offset: offset
     }
-    this.setState({isLoading2: true})
+    this.setState({ isLoading2: true })
     Api.request(Routes.eventsRetrieve, parameter, response => {
-      this.setState({isLoading2: false})
+      this.setState({ isLoading2: false })
       if (response.data.length > 0) {
         response.data.map((item, index) => {
           item['logo'] = item.image?.length > 0 ? item.image[0].category : null
@@ -185,7 +187,7 @@ class HomePage extends Component {
       }
     }
     this.setState({ isLoading1: true })
-    console.log(Routes.merchantsRetrieve, parameter)
+    console.log(Routes.merchantsRetrieve, parameter, '-----------------------------------')
     Api.request(Routes.merchantsRetrieve, parameter, response => {
       this.setState({ isLoading1: false })
       console.log('[RESPONSE] CHURCH ', response)
@@ -257,16 +259,57 @@ class HomePage extends Component {
               redirect={() => {
                 this.props.navigation.navigate('subscriptionStack')
               }}
-            /> : 
-            <CustomizedHeader
-              version={4}
-              text={language.homepage.noSubscription}
-              redirect={() => {
-                this.props.navigation.navigate('subscriptionStack')
-              }}
-            />
+            /> :
+              <CustomizedHeader
+                version={4}
+                text={language.homepage.noSubscription}
+                redirect={() => {
+                  this.props.navigation.navigate('subscriptionStack')
+                }}
+              />
             }
             <View>
+              {churches.length > 0 && <View style={Style.title}>
+                <Text
+                  numberOfLines={1}
+                  style={{
+                    fontFamily: 'Poppins-SemiBold',
+                    width: '50%'
+                  }}
+                >{language.nearbyMass}</Text>
+                <TouchableOpacity
+                  onPress={() => {
+                    this.props.navigation.navigate('massesStack')
+                  }}
+                  style={Style.right}
+                >
+                  <Text style={{
+                    fontFamily: 'Poppins-SemiBold',
+                    color: theme ? theme.primary : Color.primary
+                  }}>{language.findMass + '>>>'}</Text>
+
+                </TouchableOpacity>
+              </View>}
+              {isLoading1 &&
+                <View style={{
+                  flexDirection: 'row',
+                  width: width
+                }}>
+                  <View style={{ width: '50%' }}>
+                    <Skeleton size={1} template={'block'} height={150} />
+                  </View>
+                  <View style={{ width: '50%' }}>
+                    <Skeleton size={1} template={'block'} height={150} />
+                  </View>
+                </View>}
+              <CardsWithImages
+                version={1}
+                data={churches}
+                buttonColor={theme ? theme.secondary : Color.secondary}
+                buttonTitle={language.subscribe}
+                redirect={(data) => { this.props.navigation.navigate('churchProfileStack', { data: data }) }}
+                buttonClick={(item) => { this.props.navigation.navigate('otherTransactionStack', { type: 'Subscription Donation', data: item }) }}
+              />
               {recentlyVisited.length > 0 && <View style={Style.title}>
                 <Text
                   numberOfLines={1}
@@ -317,47 +360,6 @@ class HomePage extends Component {
                 redirect={(index) => { this.props.navigation.navigate('churchProfileStack', { data: index }) }}
                 buttonClick={(item) => { this.props.navigation.navigate('otherTransactionStack', { type: 'Subscription Donation', data: item }) }}
               />
-              {churches.length > 0 && <View style={Style.title}>
-                <Text
-                  numberOfLines={1}
-                  style={{
-                    fontFamily: 'Poppins-SemiBold',
-                    width: '50%'
-                  }}
-                >{language.nearbyMass}</Text>
-                <TouchableOpacity
-                  onPress={() => {
-                    this.props.navigation.navigate('massesStack')
-                  }}
-                  style={Style.right}
-                >
-                  <Text style={{
-                    fontFamily: 'Poppins-SemiBold',
-                    color: theme ? theme.primary : Color.primary
-                  }}>{language.findMass + '>>>'}</Text>
-
-                </TouchableOpacity>
-              </View>}
-              {isLoading1 &&
-                <View style={{
-                  flexDirection: 'row',
-                  width: width
-                }}>
-                  <View style={{ width: '50%' }}>
-                    <Skeleton size={1} template={'block'} height={150} />
-                  </View>
-                  <View style={{ width: '50%' }}>
-                    <Skeleton size={1} template={'block'} height={150} />
-                  </View>
-                </View>}
-              <CardsWithImages
-                version={1}
-                data={churches}
-                buttonColor={theme ? theme.secondary : Color.secondary}
-                buttonTitle={language.subscribe}
-                redirect={(data) => { this.props.navigation.navigate('churchProfileStack', { data: data }) }}
-                buttonClick={(item) => { this.props.navigation.navigate('otherTransactionStack', { type: 'Subscription Donation', data: item }) }}
-              />
               {events.length > 0 && <View style={Style.title}>
                 <Text
                   numberOfLines={1}
@@ -397,7 +399,7 @@ class HomePage extends Component {
                 data={events}
                 buttonColor={theme ? theme.secondary : Color.secondary}
                 buttonTitle={language.donate}
-                redirect={(item) => { this.props.navigation.navigate('viewEventStack', {data : item}) }}
+                redirect={(item) => { this.props.navigation.navigate('viewEventStack', { data: item }) }}
                 buttonClick={(item) => { this.props.navigation.navigate('otherTransactionStack', { type: 'Send Event Tithings', data: item }) }}
               />
             </View>
