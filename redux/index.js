@@ -19,7 +19,8 @@ const types = {
   SET_LANGUAGE: 'SET_LANGUAGE',
   SET_COMMENTS: 'SET_COMMENTS',
   SET_SEARCH_CHURCH: 'SET_SEARCH_CHURCH',
-  SET_SEARCH_POST: 'SET_SEARCH_POST'
+  SET_SEARCH_POST: 'SET_SEARCH_POST',
+  SET_COUNTRY_CODE: 'SET_COUNTRY_CODE'
 };
 
 export const actions = {
@@ -69,6 +70,9 @@ export const actions = {
   setSearchPost(searchPost) {
     return { type: types.SET_SEARCH_POST, searchPost }
   },
+  setCountryCode(countryCode) {
+    return { type: types.SET_COUNTRY_CODE, countryCode }
+  }
 };
 
 const initialState = {
@@ -87,7 +91,8 @@ const initialState = {
   language: null,
   comments: [],
   searchChurch: null,
-  searchPost: null
+  searchPost: null,
+  countryCode: 'others'
 };
 
 storeData = async (key, value) => {
@@ -108,6 +113,7 @@ const reducer = (state = initialState, action) => {
   const { comments } = action;
   const { searchChurch } = action;
   const { searchPost } = action;
+  const { countryCode }  = action;
   switch (type) {
     case types.LOGOUT:
       AsyncStorage.clear();
@@ -187,6 +193,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         searchPost
+      }
+    case types.SET_COUNTRY_CODE:
+      return {
+        ...state,
+        countryCode
       }
     default:
       return { ...state, nav: state.nav };

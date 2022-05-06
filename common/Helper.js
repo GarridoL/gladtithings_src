@@ -131,6 +131,7 @@ export default {
     code: 'PAYPAL',
     type: 'ewallet',
     country: 'International',
+    countryCode: 'others',
     currency: 'USD',
     feeConfiguration: {
       type: 'percentage',
@@ -145,6 +146,7 @@ export default {
     code: 'STRIPE',
     type: 'bank',
     country: 'International',
+    countryCode: 'others',
     currency: 'USD',
     feeConfiguration: {
       type: 'percentage',
@@ -160,6 +162,7 @@ export default {
     code: 'GOOGLEPAY',
     type: 'ewallet',
     country: 'International',
+    countryCode: 'others',
     currency: 'USD',
     feeConfiguration: {
       type: 'percentage',

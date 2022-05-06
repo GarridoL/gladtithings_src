@@ -51,14 +51,14 @@ class Stack extends Component {
     let total = 0
     if (fee.type == 'percentage') {
       charge = (amount * (fee.amount / 100)).toFixed(2)
-      total = (amount - charge).toFixed(2)
+      total = (parseInt(amount) + parseFloat(charge)).toFixed(2)
       this.setState({
         charge,
         total
       })
     } else {
       charge = fee.amount.toFixed(2)
-      total = (amount - charge).toFixed(2)
+      total = (parseInt(amount) + parseFloat(charge)).toFixed(2)
       console.log(charge, total);
       this.setState({
         charge,
@@ -160,10 +160,10 @@ class Stack extends Component {
           flexDirection: 'row',
           justifyContent: 'space-between'
         }}>
-          <Text>Proessing Fee</Text>
+          <Text>Processing Fee</Text>
           <Text style={{
             fontWeight: 'bold'
-          }}>{currency + ' ' + charge}</Text>
+          }}>{currency + ' ' + (charge != null && charge >= 0 ? charge : '0.00')}</Text>
         </View>
 
         <View style={{
@@ -176,11 +176,24 @@ class Stack extends Component {
           }}>You will receive</Text>
           <Text style={{
             fontWeight: 'bold'
-          }}>{currency + ' ' + total}</Text>
+          }}>{currency + ' ' + (amount != null && amount >= 0 ? amount : '0.00')}</Text>
+        </View>
+        <View style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          marginTop: 20
+        }}>
+          <Text style={{
+            fontWeight: 'bold'
+          }}>Total amount</Text>
+          <Text style={{
+            fontWeight: 'bold'
+          }}>{currency + ' ' + (total != null && total >= 0 ? total : '0.00')}</Text>
         </View>
       </View>
     );
   }
+
 
   render() {
     const { isLoading, selected, currency } = this.state
